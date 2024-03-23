@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "project-e4u2b-i6z8h-o5f8l"
+version = "0.1.0"
+description = ""
+authors = ["Matias Chomali <matias.chomali.dev@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.110.0"
+uvicorn = {extras = ["standard"], version = "^0.29.0"}
+oracledb = "^2.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
