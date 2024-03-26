@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.110.0"
+fastapi = {extras = ["all"], version = "^0.110.0"}
 uvicorn = {extras = ["standard"], version = "^0.29.0"}
 oracledb = "^2.1.1"
 load-dotenv = "^0.1.0"
