@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from .db_conn import cursor
 
 app = FastAPI()
 
