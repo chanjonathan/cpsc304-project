@@ -1,12 +1,11 @@
-import { Box, Select, MenuItem, Table, SelectChangeEvent, TableBody, TableCell, TableHead, TableRow, TableContainer, Checkbox, FormControlLabel } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
-import { tableDescriptions } from './Constants';
-import { TableData, TableDescription, ColumnSelection, ColumnSelections } from './Types';
-import { Get } from '../controllers/Get';
+import { Box, Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Checkbox, FormControlLabel } from '@mui/material';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { tableDescriptions } from '../constants/Constants';
+import { TableData, ColumnSelection, ColumnSelections, TableDescription } from '../constants/Types';
+import { get } from '../controllers/Get';
 
-const Project = () => {
+const Project = ({ tableName }: { tableName: string }) => {
     
-    const [tableName, setTableName] = useState<string>(tableDescriptions[0].name);
     const [selectedColumns, setSelectedColumns] = useState<ColumnSelections>(
         tableDescriptions.reduce((acc: ColumnSelections, tableDescription) => {
             acc[tableDescription.name] = tableDescription.columns.map((column) => {
@@ -19,18 +18,7 @@ const Project = () => {
         }, {})
     );
     
-
     const [tableData, setTableData] = useState<TableData[]>([]);
-
-    const handleDropdownChange = async (event: SelectChangeEvent) => {
-        const tableDescription = tableDescriptions.find(table => table.name === event.target.value) as TableDescription;
-        setTableName(tableDescription.name);
-        
-        const selected = selectedColumns[tableDescription.name].filter(column => column.selected)
-        const columnNames = selected.map(column => column.name)
-        setTableData([])
-        setTableData(await Get(tableDescription.name, columnNames))
-    }
 
     const handleCheckBoxChange = async (event: ChangeEvent, tableName: string, columnName: string) => {
         const newSelections = {...selectedColumns};
@@ -38,52 +26,83 @@ const Project = () => {
         const newSelected = !newColumnSelection?.selected
         newColumnSelection.selected = newSelected
         setSelectedColumns(newSelections);
-
-        const selected = newSelections[tableName].filter(column => column.selected)
-        const columnNames = selected.map(column => column.name)
-        setTableData([])
-        setTableData(await Get(tableName, columnNames))
     }
 
+    useEffect(() => {
+        const selected = selectedColumns[tableName].filter(column => column.selected)
+        const columnNames = selected.map(column => column.name)
+        setTableData([])
+
+        get(tableName, columnNames).then(data => setTableData(data)).catch((e) => alert(e))
+    }, [selectedColumns, tableName])
+
+    const tableDescription = tableDescriptions.find(table => table.name === tableName) as TableDescription;
 
     return (
-        <Box>
-            <h1>
+        <Box sx={{ margin: "10px" }}>
+            <h2>
                 Projection
-            </h1>
+            </h2>
 
-            <Select
-                onChange={handleDropdownChange}
-                value={tableName}
-            >
-                { tableDescriptions.map(tableDescriptions => <MenuItem value={tableDescriptions.name}>{tableDescriptions.name}</MenuItem>) }
-            </Select>
-            
             { selectedColumns[tableName].map(column => 
-                <FormControlLabel
-                    label={column.name}
-                    control={ <Checkbox 
-                        checked={column.selected} 
-                        onChange={(event) => {
-                                handleCheckBoxChange(event, tableName, column.name)
-                            }
-                        } 
-                    /> }
-                />) 
+                tableDescription.primaryKeys.includes(column.name) ?
+                    <FormControlLabel
+                        label={column.name}
+                        control={ <Checkbox 
+                            checked={column.selected} 
+                            onChange={(event) => {
+                                    handleCheckBoxChange(event, tableName, column.name)
+                                }
+                            } 
+                        /> }
+                    />
+                    : 
+                    undefined
+                ) 
+            }
+            { selectedColumns[tableName].map(column => 
+                !tableDescription.primaryKeys.includes(column.name) ?
+                    <FormControlLabel
+                        label={column.name}
+                        control={ <Checkbox 
+                            checked={column.selected} 
+                            onChange={(event) => {
+                                    handleCheckBoxChange(event, tableName, column.name)
+                                }
+                            } 
+                        /> }
+                    />
+                    : 
+                    undefined
+                ) 
             }
             
             <TableContainer>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            { selectedColumns[tableName].map(column => column.selected ? <TableCell>{column.name}</TableCell> : undefined) }
+                            { 
+                                selectedColumns[tableName].map(column => column.selected && tableDescription.primaryKeys.includes(column.name) ? 
+                                    <TableCell sx={{ fontWeight: 900 }}>{column.name}</TableCell> : undefined) 
+                            }
+                            { 
+                                selectedColumns[tableName].map(column => column.selected && !tableDescription.primaryKeys.includes(column.name) ? 
+                                    <TableCell>{column.name}</TableCell> : undefined) 
+                            }
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         { 
                             tableData.map(data => 
                                 <TableRow>
-                                    { selectedColumns[tableName].map(column => (column.name in data) ? <TableCell>{data[column.name]}</TableCell> : undefined) }
+                                    { 
+                                        selectedColumns[tableName].map(column => (column.name in data) && tableDescription.primaryKeys.includes(column.name) ?
+                                        <TableCell sx={{ fontWeight: 900 }}>{data[column.name]}</TableCell> : undefined) 
+                                    }
+                                    {
+                                        selectedColumns[tableName].map(column => (column.name in data) && !tableDescription.primaryKeys.includes(column.name) ?
+                                        <TableCell>{data[column.name]}</TableCell> : undefined) 
+                                    }
                                 </TableRow>
                             )
                         }

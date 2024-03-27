@@ -1,6 +1,7 @@
 type TableDescription = {
     name: string,
-    columns: string[]
+    columns: string[],
+    primaryKeys: string[]
 }
 
 type TableData = {

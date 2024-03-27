@@ -1,4 +1,4 @@
-import { TableData } from "../modules/Types";
+import { TableData } from "../constants/Types";
 
 const Personnel = [
     {

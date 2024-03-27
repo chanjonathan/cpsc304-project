@@ -1,7 +1,7 @@
-import { TableData } from "../modules/Types"
-import { MockGetData } from "./MockData"
+import { TableData } from "../constants/Types"
+import { MockGetData } from "../constants/MockData"
 
-const MockGet = async (tableName: string, columns: string[]): Promise<TableData[]>  => {
+const mockGet = async (tableName: string, columns: string[]): Promise<TableData[]>  => {
     await new Promise((resolve) => {
         setTimeout(resolve, 500)
     })
@@ -14,8 +14,8 @@ const MockGet = async (tableName: string, columns: string[]): Promise<TableData[
     return mockResults
 }
 
-const Get = async (tableName: string, columns: string[]): Promise<TableData[]> => {
+const get = async (tableName: string, columns: string[]): Promise<TableData[]> => {
     return []
 }
 
-export { MockGet as Get } 
+export { mockGet as get } 

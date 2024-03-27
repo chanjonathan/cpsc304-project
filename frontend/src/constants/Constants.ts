@@ -1,5 +1,6 @@
 import { TableDescription } from "./Types";
 
+
 const tableDescriptions: TableDescription[] = [
     {
         name: "Missions",
@@ -14,7 +15,8 @@ const tableDescriptions: TableDescription[] = [
             "Latitude",
             "Longitude",
             "ControlCenterID"
-        ]
+        ],
+        primaryKeys: ["MissionID"]
     },
     {
         name: "Facilities",
@@ -22,7 +24,8 @@ const tableDescriptions: TableDescription[] = [
             "FacilityID",
             "Name",
             "Location"
-        ]
+        ],
+        primaryKeys: ["FacilityID"]
     },
     {
         name: "Ships",
@@ -31,7 +34,8 @@ const tableDescriptions: TableDescription[] = [
             "ServiceStartDate",
             "Model",
             "LaunchSiteID"
-        ]
+        ],
+        primaryKeys: ["ShipID"]
     },
     {
         name: "Personnel",
@@ -40,14 +44,16 @@ const tableDescriptions: TableDescription[] = [
             "EmployeeID",
             "Name",
             "YOE"
-        ]
+        ],
+        primaryKeys: ["EmployeeID"]
     },
     {
         name: "CrewMembers",
         columns: [
             "EmployeeID",
             "MissionsFlown"
-        ]
+        ],
+        primaryKeys: ["EmployeeID"]
     },
     {
         name: "GroundMembers",
@@ -56,42 +62,48 @@ const tableDescriptions: TableDescription[] = [
             "WorkModel",
             "FacilityID",
             "Clearance"
-        ]
+        ],
+        primaryKeys: ["EmployeeID"]
     },
     {
         name: "SupplyDepots",
         columns: [
             "FacilityID",
             "VolumetricCapacity"
-        ]
+        ],
+        primaryKeys: ["FacilityID"]
     },
     {
         name: "NumControlRooms",
         columns: [
             "MaxStaffCapacity",
             "NumControlRooms"
-        ]
+        ],
+        primaryKeys: ["NumControlRooms"]
     },
     {
         name: "MissionControlCenters",
         columns: [
             "FacilityID",
             "NumControlRooms"
-        ]
+        ],
+        primaryKeys: ["FacilityID"]
     },
     {
         name: "LaunchSites",
         columns: [
             "FacilityID",
             "MaximumSupportedClass"
-        ]
+        ],
+        primaryKeys: ["FacilityID"]
     },
     {
         name: "Models",
         columns: [
             "Model",
             "Class"
-        ]
+        ],
+        primaryKeys: ["Model"]
     },
     {
         name: "PinPoints",
@@ -101,7 +113,8 @@ const tableDescriptions: TableDescription[] = [
             "Planet",
             "Latitude",
             "Longitude"
-        ]
+        ],
+        primaryKeys: ["Planet", "Latitude", "Longitude"]
     },
     {
         name: "AssignedTo",
@@ -109,7 +122,8 @@ const tableDescriptions: TableDescription[] = [
             "EmployeeID",
             "MissionID",
             "Role"
-        ]
+        ],
+        primaryKeys: ["EmployeeID", "MissionID"]
     },
     {
         name: "Tasks",
@@ -119,7 +133,8 @@ const tableDescriptions: TableDescription[] = [
             "Description",
             "Status",
             "MissionID"
-        ]
+        ],
+        primaryKeys: ["TaskID"]
     },
     {
         name: "Cargo",
@@ -130,7 +145,8 @@ const tableDescriptions: TableDescription[] = [
             "Description",
             "DepotID",
             "ShipID"
-        ]
+        ],
+        primaryKeys: ["BarcodeNumber"]
     },
     {
         name: "Stations",
@@ -138,14 +154,16 @@ const tableDescriptions: TableDescription[] = [
             "Description",
             "Position",
             "ShipID"
-        ]
+        ],
+        primaryKeys: ["ShipID", "Position"]
     },
     {
         name: "Certifications",
         columns: [
             "CertificationID",
             "Description"
-        ]
+        ],
+        primaryKeys: ["CertificationID"]
     },
     {
         name: "Designated",
@@ -153,14 +171,16 @@ const tableDescriptions: TableDescription[] = [
             "CrewMemberID",
             "ShipID",
             "Position"
-        ]
+        ],
+        primaryKeys: ["CrewMemberID", "ShipID", "Position"]
     },
     {
         name: "Obtained",
         columns: [
             "CertificationID",
             "CrewMemberID"
-        ]
+        ],
+        primaryKeys: ["CertificationID", "CrewMemberID"]
     },
     {
         name: "Requires",
@@ -168,7 +188,8 @@ const tableDescriptions: TableDescription[] = [
             "CertificationID",
             "ShipID",
             "Position"
-        ]
+        ],
+        primaryKeys: ["CertificationID", "ShipID", "Position"]
     }
 ];
 
