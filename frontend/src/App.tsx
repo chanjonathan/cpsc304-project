@@ -2,7 +2,7 @@ import './App.css';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { Delete } from './modules/Delete';
 import { Insert } from './modules/Insert';
-import { Project } from './modules/Project';
+import { Projection } from './modules/Projection';
 import { Update } from './modules/Update';
 import { useState } from 'react';
 import { tableDescriptions } from './constants/Constants';
@@ -11,6 +11,7 @@ import { TableDescription } from './constants/Types';
 const App = () => {
 
   const [tableName, setTableName] = useState<string>(tableDescriptions[0].name);
+  const [lastDatabasUpdate, setLastDatabaseUpdate] = useState<number>(Date.now())
 
   const handleDropdownChange = async (event: SelectChangeEvent) => {
     const tableDescription = tableDescriptions.find(table => table.name === event.target.value) as TableDescription;
@@ -28,17 +29,16 @@ const App = () => {
       >
           { tableDescriptions.map(tableDescriptions => <MenuItem value={tableDescriptions.name}>{tableDescriptions.name}</MenuItem>) }
       </Select>
-      <Project 
+      <Projection
         tableName={tableName}
       />      
       <Insert 
         tableName={tableName}
       />
-      <Update 
-        tableName={tableName}
-      />
       <Delete
         tableName={tableName}
+      />
+      <Update 
       />
     </div>
   );

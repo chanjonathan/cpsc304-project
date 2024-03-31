@@ -2,7 +2,7 @@ import { Box, Button, TextField } from "@mui/material"
 import { tableDescriptions } from "../constants/Constants"
 import { TableData, TableDescription } from "../constants/Types";
 import { ChangeEvent, useEffect, useState } from "react";
-import { del } from "../controllers/Delete";
+import { deleteRow } from '../api/MockApiService';
 
 const Delete = ({ tableName }: { tableName: string }) => {
 
@@ -15,16 +15,16 @@ const Delete = ({ tableName }: { tableName: string }) => {
 
     useEffect(() => {
         setDeleteKey(
-            tableDescription.columns.reduce((acc: TableData, column: string) => {
+            tableDescription.attributes.reduce((acc: TableData, column: string) => {
             acc[column] = ""
             return acc
         }, {})
         )
-    }, [tableDescription.columns])
+    }, [tableDescription.attributes])
 
     const handleClick = async () => {
         try {
-            await del(deleteKey)
+            await deleteRow(deleteKey)
         } catch (e) {
             alert(e)
         }
@@ -37,12 +37,13 @@ const Delete = ({ tableName }: { tableName: string }) => {
     return (
         <Box sx={{ margin: "10px" }}>
             <h2>
-                Update
+                Delete
             </h2>
             <Box
                 sx={{ margin: "10px" }}
             >
-                { tableDescription.primaryKeys.map((key) => 
+                { 
+                    tableDescription.primaryKeys.map((key) => 
                         <TextField
                             label={key} 
                             sx={{}}

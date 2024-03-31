@@ -1,30 +1,30 @@
 import { Box, Button, TextField } from "@mui/material"
 import { tableDescriptions } from "../constants/Constants"
 import { TableData, TableDescription } from "../constants/Types";
-import { post } from "../controllers/Post";
+import { insertRow } from '../api/MockApiService';
 import { ChangeEvent, useEffect, useState } from "react";
 
 const Insert = ({ tableName }: { tableName: string }) => {
 
     const tableDescription = tableDescriptions.find(table => table.name === tableName) as TableDescription;
 
-    const [newRow, setNewRow] = useState<TableData>(tableDescription.columns.reduce((acc: TableData, column: string) => {
+    const [newRow, setNewRow] = useState<TableData>(tableDescription.attributes.reduce((acc: TableData, column: string) => {
         acc[column] = ""
         return acc
     }, {}));
 
     useEffect(() => {
         setNewRow(
-            tableDescription.columns.reduce((acc: TableData, column: string) => {
+            tableDescription.attributes.reduce((acc: TableData, column: string) => {
             acc[column] = ""
             return acc
         }, {})
         )
-    }, [tableDescription.columns])
+    }, [tableDescription.attributes])
 
     const handleClick = async () => {
         try {
-            await post(newRow)
+            await insertRow(newRow)
         } catch (e) {
             alert(e)
         }
@@ -42,28 +42,25 @@ const Insert = ({ tableName }: { tableName: string }) => {
             <Box
                 sx={{ margin: "10px" }}
             >
-                { tableDescription.primaryKeys.map((key) => 
+                { 
+                    tableDescription.primaryKeys.map((key) => 
                         <TextField
                             label={key} 
                             sx={{}}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, key)}
                             value={newRow[key]}
-                        />
-                    ) 
+                        />) 
                 }
             </Box>
 
-            { tableDescription.columns.map((column) => 
-                !tableDescription.primaryKeys.includes(column) ?
+            { 
+                tableDescription.attributes.map((column) => 
                     <TextField
                         label={column} 
                         sx={{ display: "flex"}}
                         onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, column)}
                         value={newRow[column]}
-                    />
-                    :
-                    undefined
-                ) 
+                    />) 
             }
             <Button
                 variant="contained"

@@ -1,7 +1,7 @@
 import { TableData } from "../constants/Types"
 import { MockGetData } from "../constants/MockData"
 
-const mockGet = async (tableName: string, columns: string[]): Promise<TableData[]>  => {
+const projection = async (tableName: string, columns: string[]): Promise<TableData[]>  => {
     await new Promise((resolve) => {
         setTimeout(resolve, 500)
     })
@@ -14,8 +14,17 @@ const mockGet = async (tableName: string, columns: string[]): Promise<TableData[
     return mockResults
 }
 
-const get = async (tableName: string, columns: string[]): Promise<TableData[]> => {
-    return []
+const insertRow = async (data: TableData) => {
+    console.log('post request with' + JSON.stringify(data))
 }
 
-export { mockGet as get } 
+const deleteRow = async (data: TableData) => {
+    console.log('delete request with' + JSON.stringify(data))
+}
+
+const updateMission = async (data: TableData) => {
+    console.log('put request with' + JSON.stringify(data))
+}
+
+
+export { projection, insertRow, deleteRow, updateMission} 

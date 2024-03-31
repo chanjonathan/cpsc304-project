@@ -1,10 +1,49 @@
-from fastapi import FastAPI
-from .db_conn import cursor
+from typing import Annotated, Dict, List, Optional, Union
+from fastapi import FastAPI, Query
+from oracledb import DatabaseError
+from db_conn import cursor
+import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# TODO: Create cursor once and pass to rest
+def main():
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    uvicorn.run(app, host="localhost", port=8000)
 
 @app.get("/")
-async def root():
+async def hello_world():
+    """
+    A simple root endpoint returning a hello message.
+    """
     return {"message": "Hello World!"}
+
+
+@app.get("/{table}")
+async def projection(table, attrs: List[str] = Query([])):
+    try:
+        query = f"""
+            SELECT {", ".join(attrs)} FROM {table}
+        """
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+        results = []
+        for row in rows:
+            result = {}
+            for i, attr in enumerate(attrs):
+                result[attr] = row[i]
+            results.append(result)
+
+        return {"result": results}
+    except DatabaseError as error:
+        return {"error": str(error)}
+
+
+main()

@@ -1,11 +1,9 @@
 import { TableDescription } from "./Types";
 
-
 const tableDescriptions: TableDescription[] = [
     {
         name: "Missions",
-        columns: [
-            "MissionID",
+        attributes: [
             "Name",
             "Description",
             "StartDate",
@@ -20,8 +18,7 @@ const tableDescriptions: TableDescription[] = [
     },
     {
         name: "Facilities",
-        columns: [
-            "FacilityID",
+        attributes: [
             "Name",
             "Location"
         ],
@@ -29,8 +26,7 @@ const tableDescriptions: TableDescription[] = [
     },
     {
         name: "Ships",
-        columns: [
-            "ShipID",
+        attributes: [
             "ServiceStartDate",
             "Model",
             "LaunchSiteID"
@@ -39,9 +35,8 @@ const tableDescriptions: TableDescription[] = [
     },
     {
         name: "Personnel",
-        columns: [
+        attributes: [
             "Salary",
-            "EmployeeID",
             "Name",
             "YOE"
         ],
@@ -49,16 +44,14 @@ const tableDescriptions: TableDescription[] = [
     },
     {
         name: "CrewMembers",
-        columns: [
-            "EmployeeID",
+        attributes: [
             "MissionsFlown"
         ],
         primaryKeys: ["EmployeeID"]
     },
     {
         name: "GroundMembers",
-        columns: [
-            "EmployeeID",
+        attributes: [
             "WorkModel",
             "FacilityID",
             "Clearance"
@@ -67,131 +60,102 @@ const tableDescriptions: TableDescription[] = [
     },
     {
         name: "SupplyDepots",
-        columns: [
-            "FacilityID",
+        attributes: [
             "VolumetricCapacity"
         ],
         primaryKeys: ["FacilityID"]
     },
     {
         name: "NumControlRooms",
-        columns: [
-            "MaxStaffCapacity",
-            "NumControlRooms"
+        attributes: [
+            "MaxStaffCapacity"
         ],
         primaryKeys: ["NumControlRooms"]
     },
     {
         name: "MissionControlCenters",
-        columns: [
-            "FacilityID",
+        attributes: [
             "NumControlRooms"
         ],
         primaryKeys: ["FacilityID"]
     },
     {
         name: "LaunchSites",
-        columns: [
-            "FacilityID",
+        attributes: [
             "MaximumSupportedClass"
         ],
         primaryKeys: ["FacilityID"]
     },
     {
         name: "Models",
-        columns: [
-            "Model",
+        attributes: [
             "Class"
         ],
         primaryKeys: ["Model"]
     },
     {
         name: "PinPoints",
-        columns: [
+        attributes: [
             "FirstVisited",
-            "LastVisited",
-            "Planet",
-            "Latitude",
-            "Longitude"
+            "LastVisited"
         ],
         primaryKeys: ["Planet", "Latitude", "Longitude"]
     },
     {
         name: "AssignedTo",
-        columns: [
-            "EmployeeID",
-            "MissionID",
+        attributes: [
             "Role"
         ],
         primaryKeys: ["EmployeeID", "MissionID"]
     },
     {
         name: "Tasks",
-        columns: [
-            "TaskID",
+        attributes: [
             "Priority",
             "Description",
-            "Status",
-            "MissionID"
+            "Status"
         ],
         primaryKeys: ["TaskID"]
     },
     {
         name: "Cargo",
-        columns: [
-            "BarcodeNumber",
+        attributes: [
             "Volume",
             "Weight",
             "Description",
-            "DepotID",
-            "ShipID"
+            "DepotID"
         ],
         primaryKeys: ["BarcodeNumber"]
     },
     {
         name: "Stations",
-        columns: [
-            "Description",
-            "Position",
-            "ShipID"
+        attributes: [
+            "Description"
         ],
         primaryKeys: ["ShipID", "Position"]
     },
     {
         name: "Certifications",
-        columns: [
-            "CertificationID",
+        attributes: [
             "Description"
         ],
         primaryKeys: ["CertificationID"]
     },
     {
         name: "Designated",
-        columns: [
-            "CrewMemberID",
-            "ShipID",
-            "Position"
-        ],
+        attributes: [],
         primaryKeys: ["CrewMemberID", "ShipID", "Position"]
     },
     {
         name: "Obtained",
-        columns: [
-            "CertificationID",
-            "CrewMemberID"
-        ],
+        attributes: [],
         primaryKeys: ["CertificationID", "CrewMemberID"]
     },
     {
         name: "Requires",
-        columns: [
-            "CertificationID",
-            "ShipID",
-            "Position"
-        ],
+        attributes: [],
         primaryKeys: ["CertificationID", "ShipID", "Position"]
     }
 ];
 
-
-export { tableDescriptions }
+export { tableDescriptions };
