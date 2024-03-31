@@ -1,5 +1,5 @@
-from typing import Annotated, Dict, List, Optional, Union
-from fastapi import FastAPI, Query
+from typing import List
+from fastapi import FastAPI, Query, Response, status
 from oracledb import DatabaseError
 from db_conn import cursor
 import uvicorn
@@ -26,7 +26,7 @@ async def hello_world():
 
 
 @app.get("/{table}")
-async def projection(table, attrs: List[str] = Query([])):
+async def projection(table, response: Response, attrs: List[str] = Query([])):
     try:
         query = f"""
             SELECT {", ".join(attrs)} FROM {table}
@@ -43,6 +43,7 @@ async def projection(table, attrs: List[str] = Query([])):
 
         return {"result": results}
     except DatabaseError as error:
+        response.status_code = status.HTTP_400_BAD_REQUEST;
         return {"error": str(error)}
 
 

@@ -8,7 +8,11 @@ const projection = async (tableName: string, columns: string[]): Promise<TableDa
         return acc
     }, [])
 	const response = await fetch(`${HOST}/${tableName}?${params.join("&")}`);
-    const { result } = await response.json();
+    const { result, error } = await response.json();
+
+    if (response.status === 400) {
+        throw new Error(error)
+    }
 	return result;
 }
 
