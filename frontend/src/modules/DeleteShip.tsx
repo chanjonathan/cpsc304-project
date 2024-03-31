@@ -2,19 +2,19 @@ import { Box, Button, TextField } from "@mui/material"
 import { tableDescriptions } from "../constants/Constants"
 import { TableData, TableDescription } from "../constants/Types";
 import { ChangeEvent, useEffect, useState } from "react";
-import { updateMission } from '../api/MockApiService';
+import { deleteShip } from '../api/MockApiService';
 
-const Update = ({ setLastDatabaseUpdate }: { setLastDatabaseUpdate: React.Dispatch<React.SetStateAction<number>> }) => {
+const DeleteShip = ({ setLastDatabaseUpdate }: { setLastDatabaseUpdate: React.Dispatch<React.SetStateAction<number>> }) => {
 
-    const tableDescription = tableDescriptions.find(table => table.name === "Missions") as TableDescription;
+    const tableDescription = tableDescriptions.find(table => table.name === "Ships") as TableDescription;
 
-    const [newRow, setNewRow] = useState<TableData>(tableDescription.attributes.reduce((acc: TableData, column: string) => {
+    const [deleteKey, setDeleteKey] = useState<TableData>(tableDescription.primaryKeys.reduce((acc: TableData, column: string) => {
         acc[column] = ""
         return acc
     }, {}));
 
     useEffect(() => {
-        setNewRow(
+        setDeleteKey(
             tableDescription.attributes.reduce((acc: TableData, column: string) => {
             acc[column] = ""
             return acc
@@ -24,21 +24,21 @@ const Update = ({ setLastDatabaseUpdate }: { setLastDatabaseUpdate: React.Dispat
 
     const handleClick = async () => {
         try {
-            await updateMission(newRow)
-            setLastDatabaseUpdate(Date.now())
+            await deleteShip(deleteKey);
+            setLastDatabaseUpdate(Date.now());
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>, column: string) => {
-        setNewRow({ ...newRow, [column]: event.target.value})
+        setDeleteKey({ ...deleteKey, [column]: event.target.value})
     }
-
+    
     return (
         <Box sx={{ margin: "10px" }}>
             <h2>
-                Update Mission
+                Delete Ship
             </h2>
             <Box
                 sx={{ margin: "10px" }}
@@ -48,31 +48,19 @@ const Update = ({ setLastDatabaseUpdate }: { setLastDatabaseUpdate: React.Dispat
                         <TextField
                             key={key}
                             label={key} 
-                            sx={{}}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, key)}
-                            value={newRow[key]}
-                        />) 
+                            value={deleteKey[key] || ""}
+                        />
+                    ) 
                 }
             </Box>
-
-            { 
-                tableDescription.attributes.map((column) => 
-                    <TextField
-                        key={column}
-                        label={column} 
-                        sx={{ display: "flex"}}
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, column)}
-                        value={newRow[column]}
-                    />) 
-            }
             <Button
                 variant="contained"
                 onClick={handleClick}
             >
-                Update
+                Delete
             </Button>
-        </Box>
-    )
+        </Box>    )
 }
 
-export { Update }
+export { DeleteShip }

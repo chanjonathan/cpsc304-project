@@ -16,17 +16,111 @@ const projection = async (tableName: string, columns: string[]): Promise<TableDa
 	return result;
 }
 
-const insertRow = async (data: TableData) => {
-    console.log('post request with' + JSON.stringify(data))
+const insertRow = async (tableName: string, keys: TableData, attrs: TableData) => {
+    const params = Object.entries(keys).map((key, value) => `${key}=${value}`)
+	const response = await fetch(`${HOST}/${tableName}?${params.join("&")}`,
+        { method: "POST", body: JSON.stringify(attrs) }
+    );
+    const { result, error } = await response.json();
+
+    if (response.status === 400) {
+        throw new Error(error)
+    }
+	return result;
 }
 
-const deleteRow = async (data: TableData) => {
-    console.log('delete request with' + JSON.stringify(data))
+const deleteShip = async (keys: TableData) => {
+    const params = Object.entries(keys).map((key, value) => `${key}=${value}`)
+	const response = await fetch(`${HOST}/ships?${params.join("&")}`,
+        { method: "DELETE" }
+    );
+    const { result, error } = await response.json();
+
+    if (response.status === 400) {
+        throw new Error(error)
+    }
+	return result;
 }
 
-const updateMission = async (data: TableData) => {
-    console.log('put request with' + JSON.stringify(data))
+const updateMission = async (keys: TableData, attrs: TableData) => {
+    const params = Object.entries(keys).map((key, value) => `${key}=${value}`)
+	const response = await fetch(`${HOST}/missions?${params.join("&")}`,
+        { method: "PUT", body: JSON.stringify(attrs) }
+    );
+    const { result, error } = await response.json();
+
+    if (response.status === 400) {
+        throw new Error(error)
+    }
+	return result;
+}
+
+const selectMission = async (userInput: string) => {
+	const response = await fetch(`${HOST}/mission/query`,
+        { method: "POST", body: JSON.stringify({ query: userInput }) }
+    );
+    const { result, error } = await response.json();
+
+    if (response.status === 400) {
+        throw new Error(error)
+    }
+	return result;
+}
+
+const personnelAssignedToMissions = async (startDate: string, endDate: string) => {
+	const response = await fetch(`${HOST}/personnel-assignedto-missions`,
+        { method: "POST", body: JSON.stringify({
+            startDate: startDate,
+            endDate: endDate,
+        }) }
+    );
+    const { result, error } = await response.json();
+
+    if (response.status === 400) {
+        throw new Error(error)
+    }
+	return result;
+}
+
+const shipCountByClass = async () => {
+	const response = await fetch(`${HOST}/ship-count-by-class`);
+    const { result, error } = await response.json();
+
+    if (response.status === 400) {
+        throw new Error(error)
+    }
+	return result;
+}
+
+const shipClassHavingMoreThanOne = async () => {
+	const response = await fetch(`${HOST}/ship-class-having-more-than-one`);
+    const { result, error } = await response.json();
+
+    if (response.status === 400) {
+        throw new Error(error)
+    }
+	return result;
+}
+
+const workModelAvgSalaryMoreThanAllAvg = async () => {
+	const response = await fetch(`${HOST}/work-model-averages-that-make-more-than-all-average`);
+    const { result, error } = await response.json();
+
+    if (response.status === 400) {
+        throw new Error(error)
+    }
+	return result;
+}
+
+const personnelAssignedToAllMissions = async () => {
+	const response = await fetch(`${HOST}/personnel-assigned-to-all-missions`);
+    const { result, error } = await response.json();
+
+    if (response.status === 400) {
+        throw new Error(error)
+    }
+	return result;
 }
 
 
-export { projection, insertRow, deleteRow, updateMission} 
+export { projection, insertRow, deleteShip, updateMission } 

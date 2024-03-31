@@ -29,7 +29,8 @@ async def hello_world():
 async def projection(table, response: Response, attrs: List[str] = Query([])):
     try:
         query = f"""
-            SELECT {", ".join(attrs)} FROM {table}
+            SELECT {", ".join(attrs)} 
+            FROM {table}
         """
         cursor.execute(query)
         rows = cursor.fetchall()

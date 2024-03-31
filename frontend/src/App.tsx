@@ -1,9 +1,9 @@
 import './App.css';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { Delete } from './modules/Delete';
+import { DeleteShip } from './modules/DeleteShip';
 import { Insert } from './modules/Insert';
 import { Projection } from './modules/Projection';
-import { Update } from './modules/Update';
+import { UpdateMission } from './modules/UpdateMission';
 import { useState } from 'react';
 import { tableDescriptions } from './constants/Constants';
 import { TableDescription } from './constants/Types';
@@ -44,11 +44,10 @@ const App = () => {
         tableName={tableName}
         setLastDatabaseUpdate={setLastDatabaseUpdate}
       />
-      <Delete
-        tableName={tableName}
+      <DeleteShip
         setLastDatabaseUpdate={setLastDatabaseUpdate}
       />
-      <Update
+      <UpdateMission
         setLastDatabaseUpdate={setLastDatabaseUpdate} 
       />
     </div>

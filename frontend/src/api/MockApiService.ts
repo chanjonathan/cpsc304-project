@@ -5,7 +5,7 @@ const projection = async (tableName: string, columns: string[]): Promise<TableDa
     await new Promise((resolve) => {
         setTimeout(resolve, 500)
     })
-    console.log("get request for " + tableName + " with colums: " + columns)
+    console.log("get request for", tableName, "with colums:", columns)
     const mockResults = MockGetData[tableName].map((data) => columns.reduce((acc: TableData, column) => {
         acc[column] = data[column] 
         return acc
@@ -14,17 +14,17 @@ const projection = async (tableName: string, columns: string[]): Promise<TableDa
     return mockResults
 }
 
-const insertRow = async (data: TableData) => {
-    console.log('post request with' + JSON.stringify(data))
+const insertRow = async (tableName: string, keys: TableData, attrs: TableData) => {
+    console.log("post request with", tableName, JSON.stringify(keys), JSON.stringify(attrs))
 }
 
-const deleteRow = async (data: TableData) => {
-    console.log('delete request with' + JSON.stringify(data))
+const deleteShip = async (keys: TableData)  => {
+    console.log("delete ship request with", JSON.stringify(keys))
 }
 
-const updateMission = async (data: TableData) => {
-    console.log('put request with' + JSON.stringify(data))
+const updateMission = async (keys: TableData, attrs: TableData) => {
+    console.log("update mission request with", JSON.stringify(keys), JSON.stringify(attrs))
 }
 
 
-export { projection, insertRow, deleteRow, updateMission} 
+export { projection, insertRow, deleteShip, updateMission} 
