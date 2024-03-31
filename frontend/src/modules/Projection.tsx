@@ -4,7 +4,7 @@ import { tableDescriptions } from '../constants/Constants';
 import { TableData, ColumnSelection, ColumnSelections, TableDescription } from '../constants/Types';
 import { projection } from '../api/ApiService';
 
-const Projection = ({ tableName }: { tableName: string }) => {
+const Projection = ({ tableName, lastDatabaseUpdate }: { tableName: string, lastDatabaseUpdate: number }) => {
     
     const [columnSelection, setColumnSelection] = useState<ColumnSelections>(
         tableDescriptions.reduce((acc: ColumnSelections, tableDescription) => {
@@ -34,11 +34,8 @@ const Projection = ({ tableName }: { tableName: string }) => {
         const columnNames = selected.map(column => column.name)
 
         setTableData([])
-        projection(tableName, columnNames).then(data => {
-            console.log(data)
-            setTableData(data)}
-            )
-    }, [columnSelection, tableName])
+        projection(tableName, columnNames).then(data => setTableData(data)).catch((e) => console.log(e))
+    }, [columnSelection, tableName, lastDatabaseUpdate])
 
     const tableDescription = tableDescriptions.find(table => table.name === tableName) as TableDescription;
 
@@ -50,6 +47,7 @@ const Projection = ({ tableName }: { tableName: string }) => {
 
             { columnSelection[tableName].map(column => 
                     <FormControlLabel
+                        key={column.name}
                         label={column.name}
                         control={ <Checkbox 
                             checked={column.selected} 
@@ -68,7 +66,7 @@ const Projection = ({ tableName }: { tableName: string }) => {
                             <TableRow>
                                 { 
                                     columnSelection[tableName].map(column => column.selected &&
-                                        <TableCell sx={tableDescription.primaryKeys.includes(column.name) ? { fontWeight: 900 } : {}}>
+                                        <TableCell key={column.name} sx={tableDescription.primaryKeys.includes(column.name) ? { fontWeight: 900 } : {}}>
                                             {column.name}
                                         </TableCell>) 
                                 }
@@ -76,11 +74,11 @@ const Projection = ({ tableName }: { tableName: string }) => {
                         </TableHead>
                         <TableBody>
                             { 
-                                tableData.map(data => 
-                                        <TableRow>
+                                tableData.map((data, i)=> 
+                                        <TableRow key={i}>
                                             { 
                                                 columnSelection[tableName].map(column => (column.name in data) &&
-                                                <TableCell sx={tableDescription.primaryKeys.includes(column.name) ? { fontWeight: 900 } : {}}>
+                                                <TableCell key={column.name} sx={tableDescription.primaryKeys.includes(column.name) ? { fontWeight: 900 } : {}}>
                                                     {data[column.name]}
                                                 </TableCell>) 
                                             }

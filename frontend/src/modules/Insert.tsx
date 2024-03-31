@@ -4,7 +4,7 @@ import { TableData, TableDescription } from "../constants/Types";
 import { insertRow } from '../api/MockApiService';
 import { ChangeEvent, useEffect, useState } from "react";
 
-const Insert = ({ tableName }: { tableName: string }) => {
+const Insert = ({ tableName, setLastDatabaseUpdate }: { tableName: string, setLastDatabaseUpdate: React.Dispatch<React.SetStateAction<number>> }) => {
 
     const tableDescription = tableDescriptions.find(table => table.name === tableName) as TableDescription;
 
@@ -24,9 +24,10 @@ const Insert = ({ tableName }: { tableName: string }) => {
 
     const handleClick = async () => {
         try {
-            await insertRow(newRow)
-        } catch (e) {
-            alert(e)
+            await insertRow(newRow);
+            setLastDatabaseUpdate(Date.now())
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -45,6 +46,7 @@ const Insert = ({ tableName }: { tableName: string }) => {
                 { 
                     tableDescription.primaryKeys.map((key) => 
                         <TextField
+                            key={key}
                             label={key} 
                             sx={{}}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, key)}
@@ -52,12 +54,12 @@ const Insert = ({ tableName }: { tableName: string }) => {
                         />) 
                 }
             </Box>
-
             { 
                 tableDescription.attributes.map((column) => 
                     <TextField
+                        key={column}
                         label={column} 
-                        sx={{ display: "flex"}}
+                        sx={{ display: "flex" }}
                         onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, column)}
                         value={newRow[column]}
                     />) 

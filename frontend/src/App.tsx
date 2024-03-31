@@ -13,7 +13,7 @@ const App = () => {
   const [tableName, setTableName] = useState<string>(tableDescriptions[0].name);
   const [lastDatabasUpdate, setLastDatabaseUpdate] = useState<number>(Date.now())
 
-  const handleDropdownChange = async (event: SelectChangeEvent) => {
+  const handleDropdownChange = async (event: SelectChangeEvent): Promise<void> => {
     const tableDescription = tableDescriptions.find(table => table.name === event.target.value) as TableDescription;
     setTableName(tableDescription.name);
   }
@@ -27,18 +27,29 @@ const App = () => {
           onChange={handleDropdownChange}
           value={tableName}
       >
-          { tableDescriptions.map(tableDescriptions => <MenuItem value={tableDescriptions.name}>{tableDescriptions.name}</MenuItem>) }
+          { tableDescriptions.map(tableDescriptions => 
+            <MenuItem 
+              key={tableDescriptions.name} 
+              value={tableDescriptions.name}
+            >
+              {tableDescriptions.name}
+            </MenuItem>) 
+          }
       </Select>
       <Projection
         tableName={tableName}
+        lastDatabaseUpdate={lastDatabasUpdate}
       />      
       <Insert 
         tableName={tableName}
+        setLastDatabaseUpdate={setLastDatabaseUpdate}
       />
       <Delete
         tableName={tableName}
+        setLastDatabaseUpdate={setLastDatabaseUpdate}
       />
-      <Update 
+      <Update
+        setLastDatabaseUpdate={setLastDatabaseUpdate} 
       />
     </div>
   );

@@ -4,7 +4,7 @@ import { TableData, TableDescription } from "../constants/Types";
 import { ChangeEvent, useEffect, useState } from "react";
 import { deleteRow } from '../api/MockApiService';
 
-const Delete = ({ tableName }: { tableName: string }) => {
+const Delete = ({ tableName, setLastDatabaseUpdate }: { tableName: string, setLastDatabaseUpdate: React.Dispatch<React.SetStateAction<number>> }) => {
 
     const tableDescription = tableDescriptions.find(table => table.name === tableName) as TableDescription;
 
@@ -24,9 +24,10 @@ const Delete = ({ tableName }: { tableName: string }) => {
 
     const handleClick = async () => {
         try {
-            await deleteRow(deleteKey)
-        } catch (e) {
-            alert(e)
+            await deleteRow(deleteKey);
+            setLastDatabaseUpdate(Date.now());
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -45,10 +46,10 @@ const Delete = ({ tableName }: { tableName: string }) => {
                 { 
                     tableDescription.primaryKeys.map((key) => 
                         <TextField
+                            key={key}
                             label={key} 
-                            sx={{}}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, key)}
-                            value={deleteKey[key]}
+                            value={deleteKey[key] || ""}
                         />
                     ) 
                 }
