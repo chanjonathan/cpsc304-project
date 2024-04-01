@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-import oracledb
+from sqlalchemy import create_engine, MetaData, text
 
 load_dotenv()
 
@@ -10,12 +10,14 @@ host = os.getenv("ORACLE_HOST")
 port = os.getenv("ORACLE_PORT")
 dbname = os.getenv("ORACLE_DBNAME")
 
-connection = oracledb.connect(
-    user=user,
-    password=password,
-    dsn=f"{host}:{port}/{dbname}"
-)
+engine = create_engine(
+    f'oracle+oracledb://{user}:{password}@{host}:{port}/?service_name={dbname}',
+    thick_mode=None)
 
-print("Successfully connected to Oracle Database")
+metadata = MetaData()
+metadata.reflect(bind=engine)
 
-cursor = connection.cursor()
+with engine.connect() as connection:
+    print(connection.scalar(text("""SELECT UNIQUE CLIENT_DRIVER
+                                    FROM V$SESSION_CONNECT_INFO
+                                    WHERE SID = SYS_CONTEXT('USERENV', 'SID')""")))

@@ -1,7 +1,8 @@
-from typing import List
-from fastapi import FastAPI, Query, Response, status
+from typing import List, Dict
+from fastapi import FastAPI, Query, Response, status, Request
 from oracledb import DatabaseError
-from db_conn import cursor
+from db_conn import engine, metadata
+from sqlalchemy import text, insert
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -17,6 +18,16 @@ def main():
     )
     uvicorn.run(app, host="localhost", port=8000)
 
+def parseRowsToJSON(rows, attrs):
+    parsedRows = []
+    for row in rows:
+        result = {}
+        for i, attr in enumerate(attrs):
+            result[attr] = row[i]
+        parsedRows.append(result)
+    return parsedRows
+
+
 @app.get("/")
 async def hello_world():
     """
@@ -24,28 +35,34 @@ async def hello_world():
     """
     return {"message": "Hello World!"}
 
+@app.post("/{table}", status_code = 400)
+async def createEntry(table, request: Request, response: Response):
+    attributes = dict(request.query_params)
+    query = insert(metadata.tables[table.lower()]).values(**attributes)
+    with engine.connect() as conn:
+        conn.execute(query)
+        conn.commit()
+        response.status_code = status.HTTP_200_OK
+        return {"result": "success"}
+    return {"error": "couldnt insert data into db, check field names are all lowercase and data isn't duplicated"}
 
-@app.get("/{table}")
-async def projection(table, response: Response, attrs: List[str] = Query([])):
+@app.get("/{table}", status_code = 400)
+async def getTableData(table, response: Response, attrs: List[str] = Query([])):
+    if (len(attrs) == 0):
+        return {"error": "pass at least one attribute"}
+
     try:
         query = f"""
             SELECT {", ".join(attrs)} 
             FROM {table}
         """
-        cursor.execute(query)
-        rows = cursor.fetchall()
+        with engine.connect() as conn:
+            rows = conn.execute(text(query)).fetchall()
 
-        results = []
-        for row in rows:
-            result = {}
-            for i, attr in enumerate(attrs):
-                result[attr] = row[i]
-            results.append(result)
-
+        results = parseRowsToJSON(rows, attrs)
+        response.status_code = status.HTTP_200_OK
         return {"result": results}
     except DatabaseError as error:
-        response.status_code = status.HTTP_400_BAD_REQUEST;
         return {"error": str(error)}
-
 
 main()
