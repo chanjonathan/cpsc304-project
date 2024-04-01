@@ -32,6 +32,106 @@ async def hello_world():
     """
     return {"message": "Hello World!"}
 
+@app.get("/ship-count-by-class", status_code=400)
+async def getShipCountByClass(response: Response):
+    try:
+        query = """
+            SELECT m.Class, COUNT(*) as shipCount
+            FROM ships s, models m
+            WHERE s.Model=m.Model
+            GROUP BY m.Class
+        """
+        with engine.connect() as conn:
+            rows = conn.execute(text(query)).fetchall()
+            keys = conn.execute(text(query)).keys()
+        results = parseRowsToJSON(rows, keys)
+        response.status_code = status.HTTP_200_OK
+        return results
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/ship-class-having-more-than-one", status_code=400)
+async def moreThanOneShipClass(response: Response):
+    try:
+        query = """
+SELECT m.Class, COUNT(*) as shipCount
+FROM ships s, models m
+WHERE s.Model=m.Model
+GROUP BY m.Class
+HAVING COUNT(*)>1
+        """
+        with engine.connect() as conn:
+            rows = conn.execute(text(query)).fetchall()
+            keys = conn.execute(text(query)).keys()
+        results = parseRowsToJSON(rows, keys)
+        response.status_code = status.HTTP_200_OK
+        return results
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/work-model-averages-that-make-more-than-all-average", status_code=400)
+async def average(response: Response):
+    try:
+        query = """
+SELECT g.WorkModel, AVG(p,Salary) AS modelAvgSalary
+FROM groundMembers g, personnel p
+WHERE g.EmployeeID=p.EmployeeID
+GROUP BY g.WorkModel
+HAVING AVG(Salary) > ( SELECT AVG(p1.Salary)
+				 FROM personnel p1 )
+        """
+        with engine.connect() as conn:
+            rows = conn.execute(text(query)).fetchall()
+            keys = conn.execute(text(query)).keys()
+        results = parseRowsToJSON(rows, keys)
+        response.status_code = status.HTTP_200_OK
+        return results
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/personnel-assigned-to-all-missions", status_code=400)
+async def average(response: Response):
+    try:
+        query = """
+SELECT p.EmployeeID
+FROM Personnel p
+WHERE NOT EXISTS (SELECT m.MissionID
+   		  FROM Missions m 
+  		  MINUS 
+  SELECT a.MissionID
+  FROM AssignedTo a
+  WHERE a.EmployeeID = p.EmployeeID);
+        """
+        with engine.connect() as conn:
+            rows = conn.execute(text(query)).fetchall()
+            keys = conn.execute(text(query)).keys()
+        results = parseRowsToJSON(rows, keys)
+        response.status_code = status.HTTP_200_OK
+        return results
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.post("/assignedtomissions", status_code=400)
+async def assignedToMissions(request: Request, response: Response):
+    try:
+        body = await request.json()
+        print(body)
+        query = f"""
+        SELECT * FROM missions m, assignedTo a, personnel p WHERE 
+        m.MissionID=a.MissionID and a.EmployeeID=p.EmployeeID and \'{body["startDate"]}\'<=m.startDate and m.endDate<=\'{body["endDate"]}\'
+        """
+        with engine.connect() as conn:
+            rows = conn.execute(text(query)).fetchall()
+            keys = conn.execute(text(query)).keys()
+        results = parseRowsToJSON(rows, keys)
+        response.status_code = status.HTTP_200_OK
+        return results
+    except Exception as e:
+        return {"error": str(e)}
 
 
 @app.post("/{table}", status_code=400)
@@ -87,10 +187,8 @@ async def updateMissions(request: Request, response: Response):
 @app.post("/Missions/missions/query", status_code=400)
 async def queryMissions(request: Request, response: Response):
     try:
-        table = metadata.tables["missions"]
         body = await request.json()
         query = f"""SELECT * FROM Missions WHERE {body['query']}"""
-        print(query)
         with engine.connect() as conn:
             rows = conn.execute(text(query)).fetchall()
             keys = conn.execute(text(query)).keys()
@@ -99,8 +197,6 @@ async def queryMissions(request: Request, response: Response):
         return results
     except Exception as e:
         return {"error": str(e)}
-
-
 
 
 @app.get("/{table}", status_code=400)
