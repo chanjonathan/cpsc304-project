@@ -138,7 +138,7 @@ CREATE TABLE Stations(
 	Position CHAR(30),
 	ShipID CHAR(10),
 	PRIMARY KEY (ShipID, Position),
-	FOREIGN KEY (ShipID) REFERENCES Ships
+	FOREIGN KEY (ShipID) REFERENCES Ships ON DELETE CASCADE
 );
 
 CREATE TABLE Certifications(
