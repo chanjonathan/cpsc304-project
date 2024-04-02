@@ -93,7 +93,7 @@ HAVING AVG(Salary) > ( SELECT AVG(p1.Salary)
 
 
 @app.get("/personnel-assigned-to-all-missions", status_code=400)
-async def average(response: Response):
+async def allMissions(response: Response):
     try:
         query = """
 SELECT p.EmployeeID
