@@ -43,7 +43,7 @@ const PersonnelMissions = () => {
     };
 
     return (
-        <Box>
+        <Box sx={{ margin: "10px" }}>
             <Typography variant="h4">
                 Personnel Mission Assignments By Period
             </Typography>

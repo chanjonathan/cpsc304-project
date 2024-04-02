@@ -46,7 +46,7 @@ async def getShipCountByClass(response: Response):
             keys = conn.execute(text(query)).keys()
         results = parseRowsToJSON(rows, keys)
         response.status_code = status.HTTP_200_OK
-        return results
+        return {"result": results}
     except Exception as e:
         return {"error": str(e)}
 
@@ -66,7 +66,7 @@ HAVING COUNT(*)>1
             keys = conn.execute(text(query)).keys()
         results = parseRowsToJSON(rows, keys)
         response.status_code = status.HTTP_200_OK
-        return results
+        return {"result": results}
     except Exception as e:
         return {"error": str(e)}
 
@@ -88,7 +88,7 @@ HAVING AVG(p.Salary) > ( SELECT AVG(p1.Salary)
             keys = conn.execute(text(query)).keys()
         results = parseRowsToJSON(rows, keys)
         response.status_code = status.HTTP_200_OK
-        return results
+        return {"result": results}
     except Exception as e:
         return {"error": str(e)}
 
@@ -111,7 +111,7 @@ WHERE NOT EXISTS (SELECT m.MissionID
             keys = conn.execute(text(query)).keys()
         results = parseRowsToJSON(rows, keys)
         response.status_code = status.HTTP_200_OK
-        return results
+        return {"result": results}
     except Exception as e:
         return {"error": str(e)}
 

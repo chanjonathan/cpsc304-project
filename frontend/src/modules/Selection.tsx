@@ -72,7 +72,7 @@ const SelectMission = () => {
    const tableDescription = tableDescriptions.find(table => table.name === "Missions") as TableDescription;
 
     return (
-        <Box>
+        <Box sx={{ margin: "10px" }}>
             <Typography variant="h4">
                 Select Mission
             </Typography>

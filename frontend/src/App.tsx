@@ -7,6 +7,7 @@ import { UpdateMission } from './modules/UpdateMission';
 import { useState } from 'react';
 import { SelectMission } from './modules/Selection';
 import { PersonnelMissions } from './modules/PersonnelMissions';
+import { ShipCountByClass } from './modules/ShipCountByClass';
 
 enum View {
   Projection,
@@ -97,6 +98,9 @@ const App = () => {
         </Box>
 
         <Box sx={{...(view === View.CoolStats ? {} : {display: "none"})}}>
+          <ShipCountByClass
+            lastDatabaseUpdate={lastDatabaseUpdate}
+          />
         </Box>
 
       </Box>

@@ -50,7 +50,6 @@ const deleteShip = async (keys: TableData) => {
 }
 
 const updateMission = async (keys: TableData, attrs: TableData) => {
-    console.log(keys, attrs)
     const params = Object.entries(keys).map(([key, value]) => `${key.toLowerCase()}=${value}`)
 	const response = await fetch(`${HOST}/Missions?${params.join("&")}`,
         { method: "PUT", body: JSON.stringify(attrs) }
@@ -97,7 +96,7 @@ const shipCountByClass = async () => {
     if (response.status === 400) {
         throw new Error(error)
     }
-	return result;
+	return mapDataToLower(result);
 }
 
 const shipClassHavingMoreThanOne = async () => {
@@ -131,4 +130,12 @@ const personnelAssignedToAllMissions = async () => {
 }
 
 
-export { projection, insertRow, deleteShip, updateMission, selectMission, personnelAssignedToMissions } 
+export {
+    projection,
+    insertRow,
+    deleteShip,
+    updateMission,
+    selectMission,
+    personnelAssignedToMissions,
+    shipCountByClass
+} 
