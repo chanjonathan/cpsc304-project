@@ -75,12 +75,13 @@ HAVING COUNT(*)>1
 async def average(response: Response):
     try:
         query = """
-    SELECT g.WorkModel, AVG(p,Salary) AS modelAvgSalary
-    FROM groundMembers g, personnel p
-    WHERE g.EmployeeID=p.EmployeeID
-    GROUP BY g.WorkModel
-    HAVING AVG(Salary) > ( SELECT AVG(p1.Salary)
-                                     FROM personnel p1 )
+SELECT g.WorkModel, AVG(p.Salary) AS modelAvgSalary
+FROM groundMembers g, personnel p
+WHERE g.EmployeeID=p.EmployeeID
+GROUP BY g.WorkModel
+HAVING AVG(p.Salary) > ( SELECT AVG(p1.Salary)
+						 FROM groundmembers g, personnel p1 
+						 where g.employeeid=p1.employeeid )
         """
         with engine.connect() as conn:
             rows = conn.execute(text(query)).fetchall()
