@@ -75,12 +75,12 @@ HAVING COUNT(*)>1
 async def average(response: Response):
     try:
         query = """
-SELECT g.WorkModel, AVG(p,Salary) AS modelAvgSalary
-FROM groundMembers g, personnel p
-WHERE g.EmployeeID=p.EmployeeID
-GROUP BY g.WorkModel
-HAVING AVG(Salary) > ( SELECT AVG(p1.Salary)
-				 FROM personnel p1 )
+    SELECT g.WorkModel, AVG(p,Salary) AS modelAvgSalary
+    FROM groundMembers g, personnel p
+    WHERE g.EmployeeID=p.EmployeeID
+    GROUP BY g.WorkModel
+    HAVING AVG(Salary) > ( SELECT AVG(p1.Salary)
+                                     FROM personnel p1 )
         """
         with engine.connect() as conn:
             rows = conn.execute(text(query)).fetchall()
@@ -103,7 +103,7 @@ WHERE NOT EXISTS (SELECT m.MissionID
   		  MINUS 
   SELECT a.MissionID
   FROM AssignedTo a
-  WHERE a.EmployeeID = p.EmployeeID);
+  WHERE a.EmployeeID = p.EmployeeID)
         """
         with engine.connect() as conn:
             rows = conn.execute(text(query)).fetchall()
@@ -137,8 +137,9 @@ async def assignedToMissions(request: Request, response: Response):
 @app.post("/{table}", status_code=400)
 async def createEntry(table, request: Request, response: Response):
     attributes = dict(request.query_params)
+    attributes_lower = {attr.lower(): value for attr, value in attributes.items()}
     try:
-        query = insert(metadata.tables[table.lower()]).values(**attributes)
+        query = insert(metadata.tables[table.lower()]).values(**attributes_lower)
         with engine.connect() as conn:
             conn.execute(query)
             conn.commit()
