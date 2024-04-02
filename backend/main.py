@@ -115,7 +115,7 @@ WHERE NOT EXISTS (SELECT m.MissionID
         return {"error": str(e)}
 
 
-@app.post("/assignedtomissions", status_code=400)
+@app.post("/personnel-assignedto-missions", status_code=400)
 async def assignedToMissions(request: Request, response: Response):
     try:
         body = await request.json()
