@@ -5,10 +5,10 @@ INSERT ALL
     INTO Personnel VALUES (60000, '0000000004', 'Malcolm Reynolds', DATE '2024-04-28')
     INTO Personnel VALUES (60000, '0000000005', 'John Doe', DATE '2024-04-21')
     INTO Personnel VALUES (60000, '0000000006', 'Neil Armstrong', DATE '1962-04-01')
-    INTO Personnel VALUES (60000, '0000000007', 'Buzz Aldrin', DATE '1962-05-23')
-    INTO Personnel VALUES (60000, '0000000008', 'Wullf Yularen', DATE '2023-07-10')
-    INTO Personnel VALUES (60000, '0000000009', 'David Hickman', DATE '2018-01-03')
-    INTO Personnel VALUES (60000, '0000000010', 'Joseph Hatfield', DATE '2021-11-27')
+    INTO Personnel VALUES (30000, '0000000007', 'Buzz Aldrin', DATE '1962-05-23')
+    INTO Personnel VALUES (200000, '0000000008', 'Wullf Yularen', DATE '2023-07-10')
+    INTO Personnel VALUES (30000, '0000000009', 'David Hickman', DATE '2018-01-03')
+    INTO Personnel VALUES (30000, '0000000010', 'Joseph Hatfield', DATE '2021-11-27')
 SELECT 1 FROM dual;
 
 INSERT ALL
@@ -115,6 +115,10 @@ INSERT ALL
     INTO AssignedTo VALUES('0000000002', '0000000001', 'Flight Engineer')
     INTO AssignedTo VALUES('0000000003', '0000000001', 'Commander')
     INTO AssignedTo VALUES('0000000001', '0000000001', 'Pilot')
+    INTO AssignedTo VALUES('0000000001', '0000000002', 'Pilot')
+    INTO AssignedTo VALUES('0000000001', '0000000003', 'Pilot')
+    INTO AssignedTo VALUES('0000000001', '0000000004', 'Pilot')
+    INTO AssignedTo VALUES('0000000001', '0000000005', 'Pilot')
 SELECT 1 FROM dual;
 
 INSERT ALL
