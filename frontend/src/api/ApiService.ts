@@ -137,5 +137,8 @@ export {
     updateMission,
     selectMission,
     personnelAssignedToMissions,
-    shipCountByClass
+    shipCountByClass,
+    shipClassHavingMoreThanOne,
+    workModelAvgSalaryMoreThanAllAvg,
+    personnelAssignedToAllMissions
 } 

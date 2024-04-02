@@ -8,6 +8,9 @@ import { useState } from 'react';
 import { SelectMission } from './modules/Selection';
 import { PersonnelMissions } from './modules/PersonnelMissions';
 import { ShipCountByClass } from './modules/ShipCountByClass';
+import { PopularShipClasses } from './modules/PopularShipClasses';
+import { HighEarningWorkModels } from './modules/HighEarningWorkModels';
+import { PersonnelOnAllMissions } from './modules/PersonnelOnAllMissions';
 
 enum View {
   Projection,
@@ -101,6 +104,15 @@ const App = () => {
           <ShipCountByClass
             lastDatabaseUpdate={lastDatabaseUpdate}
           />
+          <PopularShipClasses
+            lastDatabaseUpdate={lastDatabaseUpdate}
+          />      
+          <HighEarningWorkModels
+            lastDatabaseUpdate={lastDatabaseUpdate}
+          />     
+          <PersonnelOnAllMissions
+            lastDatabaseUpdate={lastDatabaseUpdate}
+          />     
         </Box>
 
       </Box>
