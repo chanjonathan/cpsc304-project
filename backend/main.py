@@ -130,7 +130,7 @@ async def assignedToMissions(request: Request, response: Response):
             keys = conn.execute(text(query)).keys()
         results = parseRowsToJSON(rows, keys)
         response.status_code = status.HTTP_200_OK
-        return results
+        return {"result": results}
     except Exception as e:
         return {"error": str(e)}
 
@@ -186,7 +186,7 @@ async def updateMissions(request: Request, response: Response):
         return {"error": str(e)}
 
 
-@app.post("/Missions/missions/query", status_code=400)
+@app.post("/Missions/query", status_code=400)
 async def queryMissions(request: Request, response: Response):
     try:
         body = await request.json()
@@ -196,7 +196,7 @@ async def queryMissions(request: Request, response: Response):
             keys = conn.execute(text(query)).keys()
         results = parseRowsToJSON(rows, keys)
         response.status_code = status.HTTP_200_OK
-        return results
+        return { "result": results }
     except Exception as e:
         return {"error": str(e)}
 

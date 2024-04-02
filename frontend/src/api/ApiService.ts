@@ -17,7 +17,7 @@ const projection = async (tableName: string, columns: string[]): Promise<TableDa
 }
 
 const insertRow = async (tableName: string, keys: TableData, attrs: TableData) => {
-    const params = Object.entries(keys).map((key, value) => `${key}=${value}`)
+    const params = Object.entries(keys).map(([key, value]) => `${key}=${value}`)
 	const response = await fetch(`${HOST}/${tableName}?${params.join("&")}`,
         { method: "POST", body: JSON.stringify(attrs) }
     );
@@ -31,7 +31,7 @@ const insertRow = async (tableName: string, keys: TableData, attrs: TableData) =
 
 const deleteShip = async (keys: TableData) => {
     const params = Object.entries(keys).map((key, value) => `${key}=${value}`)
-	const response = await fetch(`${HOST}/ships?${params.join("&")}`,
+	const response = await fetch(`${HOST}/Ships?${params.join("&")}`,
         { method: "DELETE" }
     );
     const { result, error } = await response.json();
@@ -44,7 +44,7 @@ const deleteShip = async (keys: TableData) => {
 
 const updateMission = async (keys: TableData, attrs: TableData) => {
     const params = Object.entries(keys).map((key, value) => `${key}=${value}`)
-	const response = await fetch(`${HOST}/missions?${params.join("&")}`,
+	const response = await fetch(`${HOST}/Missions?${params.join("&")}`,
         { method: "PUT", body: JSON.stringify(attrs) }
     );
     const { result, error } = await response.json();
@@ -55,8 +55,8 @@ const updateMission = async (keys: TableData, attrs: TableData) => {
 	return result;
 }
 
-const selectMission = async (userInput: string) => {
-	const response = await fetch(`${HOST}/mission/query`,
+const selectMission = async (userInput: string): Promise<TableData[]> => {
+	const response = await fetch(`${HOST}/Missions/query`,
         { method: "POST", body: JSON.stringify({ query: userInput }) }
     );
     const { result, error } = await response.json();
@@ -64,7 +64,7 @@ const selectMission = async (userInput: string) => {
     if (response.status === 400) {
         throw new Error(error)
     }
-	return result;
+    	return result;
 }
 
 const personnelAssignedToMissions = async (startDate: string, endDate: string) => {
@@ -123,4 +123,4 @@ const personnelAssignedToAllMissions = async () => {
 }
 
 
-export { projection, insertRow, deleteShip, updateMission } 
+export { projection, insertRow, deleteShip, updateMission, selectMission, personnelAssignedToMissions } 

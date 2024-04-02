@@ -1,7 +1,7 @@
 import { Box, Button, TextField } from "@mui/material"
 import { tableDescriptions } from "../constants/Constants"
 import { TableData, TableDescription } from "../constants/Types";
-import { insertRow } from '../api/MockApiService';
+import { insertRow } from '../api/ApiService';
 import { ChangeEvent, useEffect, useState } from "react";
 
 const Insert = ({ tableName, setLastDatabaseUpdate }: { tableName: string, setLastDatabaseUpdate: React.Dispatch<React.SetStateAction<number>> }) => {
@@ -58,7 +58,7 @@ const Insert = ({ tableName, setLastDatabaseUpdate }: { tableName: string, setLa
                             label={key} 
                             sx={{}}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, key)}
-                            value={newRow[key]}
+                            value={newRow[key] || ""}
                         />) 
                 }
             </Box>
