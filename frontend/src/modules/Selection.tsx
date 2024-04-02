@@ -1,8 +1,9 @@
-import { Box, Button, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import { Box, Button, MenuItem, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import { tableDescriptions } from "../constants/Constants";
 import { TableData, TableDescription } from "../constants/Types";
 import { selectMission } from "../api/ApiService";
+import { DataTable } from "./DataTable";
 
 type Condition = {
     column: string
@@ -32,8 +33,6 @@ const SelectMission = () => {
     const [selection, setSelection] = useState<TableData[] | null>(null)
     const [conditions, setConditions] = useState<Condition[]>([]);
     const [connectors, setConnectors] = useState<Connector[]>([]);
-
-    const tableDescription = tableDescriptions.find(table => table.name === "Missions") as TableDescription;
 
     const handleAdd = () => {
         const id = crypto.randomUUID()
@@ -66,12 +65,17 @@ const SelectMission = () => {
             const selection = await selectMission(userInput || "1=1");
             setSelection(selection);
         } catch (e) {
-            console.log(e)
+            console.error(e)
         }
     }
 
+   const tableDescription = tableDescriptions.find(table => table.name === "Missions") as TableDescription;
+
     return (
         <Box>
+            <Typography variant="h4">
+                Select Mission
+            </Typography>
             <Box>
                 { conditions.map((condition, i) => 
                     <Box key={`connector-${condition.id}`}>
@@ -97,34 +101,11 @@ const SelectMission = () => {
             </Box>
             <Button onClick={handleSelect} variant="contained">Select</Button>
             { selection && 
-                <TableContainer sx={{minheight: "100px"}}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    { 
-                                        tableDescription.primaryKeys.concat(tableDescription.attributes).map(column => 
-                                            <TableCell key={column} sx={tableDescription.primaryKeys.includes(column) ? { fontWeight: 900 } : {}}>
-                                                {column}
-                                            </TableCell>) 
-                                    }
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                { 
-                                    selection.map((data, i)=> 
-                                        <TableRow key={i}>
-                                            { 
-                                                tableDescription.primaryKeys.concat(tableDescription.attributes).map(column =>
-                                                <TableCell key={column} sx={tableDescription.primaryKeys.includes(column) ? { fontWeight: 900 } : {}}>
-                                                    {data[column.toLowerCase()]}
-                                                </TableCell>) 
-                                            }
-                                        </TableRow>
-                                    )
-                                }
-                            </TableBody>
-                        </Table>  
-                </TableContainer>   
+                <DataTable
+                    columns={tableDescription.primaryKeys.concat(tableDescription.attributes)}
+                    keys={tableDescription.primaryKeys}
+                    data={selection}
+                />  
             }
         </Box>
     )
@@ -145,7 +126,6 @@ const Selector = ({ condition, conditions, setConditions, connectors, setConnect
     const handleColumnChange = (event: SelectChangeEvent<string>) => {
         const newConditions = conditions.map(condition => {
             if (condition.id === id) {
-                console.log(event.target.value)
                 condition.column = event.target.value;
             }
             return condition;

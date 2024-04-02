@@ -1,17 +1,16 @@
 import './App.css';
-import { Box, Button, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { DeleteShip } from './modules/DeleteShip';
 import { Insert } from './modules/Insert';
 import { Projection } from './modules/Projection';
 import { UpdateMission } from './modules/UpdateMission';
 import { useState } from 'react';
-import { tableDescriptions } from './constants/Constants';
-import { TableDescription } from './constants/Types';
 import { SelectMission } from './modules/Selection';
 import { PersonnelMissions } from './modules/PersonnelMissions';
 
 enum View {
-  ProjectAndInsert,
+  Projection,
+  Insert,
   DeleteShip,
   UpdateMission,
   SelectMission,
@@ -21,21 +20,25 @@ enum View {
 
 const App = () => {
 
-  const [view, setView] = useState<View>(View.ProjectAndInsert)
-  const [tableName, setTableName] = useState<string>(tableDescriptions[0].name);
-  const [lastDatabasUpdate, setLastDatabaseUpdate] = useState<number>(Date.now())
-
-  const handleDropdownChange = async (event: SelectChangeEvent): Promise<void> => {
-    const tableDescription = tableDescriptions.find(table => table.name === event.target.value) as TableDescription;
-    setTableName(tableDescription.name);
-  }
+  const [view, setView] = useState<View>(View.Projection)
+  const [lastDatabaseUpdate, setLastDatabaseUpdate] = useState<number>(Date.now())
 
   return (
     <div className="App">
-      <Box sx={{position: "fixed", width: "100dvw", height: "100px", top: 0, backgroundColor: "white", zIndex: 10}}>
-        <h1>
+      <Box sx={{
+        position: "fixed", 
+        width: "100dvw",
+         height: "130px",
+        top: 0, 
+        backgroundColor: "white", 
+        zIndex: 10,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+        <Typography variant="h2">
           Space Agency
-        </h1>
+        </Typography>
       </Box>
       <Box sx={{
         height: "100dvh", 
@@ -48,47 +51,39 @@ const App = () => {
         justifyContent: "center",
         top: 0,
       }}>
-        <Button onClick={() => setView(View.ProjectAndInsert)}>Project & Insert</Button>
+        <Button onClick={() => setView(View.Projection)}>Project Data</Button>
+        <Button onClick={() => setView(View.Insert)}>Insert Row</Button>
         <Button onClick={() => setView(View.DeleteShip)}>Delete Ship</Button>
         <Button onClick={() => setView(View.UpdateMission)}>Update Mission</Button>
         <Button onClick={() => setView(View.SelectMission)}>Select Mission</Button>
         <Button onClick={() => setView(View.PersonnelMissions)}>Personnel Mission Assignments</Button>
         <Button onClick={() => setView(View.CoolStats)}>Cool Stats</Button>
       </Box>
-      <Box sx={{marginLeft: "250px", marginTop: "100px"}}>
+      <Box sx={{marginLeft: "250px", marginTop: "130px"}}>
         
-        <Box sx={{...(view === View.ProjectAndInsert ? {} : {display: "none"})}}>
-          <Select
-              onChange={handleDropdownChange}
-              value={tableName}
-          >
-              { tableDescriptions.map(tableDescriptions => 
-                <MenuItem 
-                  key={tableDescriptions.name} 
-                  value={tableDescriptions.name}
-                >
-                  {tableDescriptions.name}
-                </MenuItem>) 
-              }
-          </Select>
+        <Box sx={{...(view === View.Projection ? {} : {display: "none"})}}>
           <Projection
-            tableName={tableName}
-            lastDatabaseUpdate={lastDatabasUpdate}
+            lastDatabaseUpdate={lastDatabaseUpdate}
           />      
+        </Box>
+
+        <Box sx={{...(view === View.Insert ? {} : {display: "none"})}}>   
           <Insert 
-            tableName={tableName}
+            lastDatabaseUpdate={lastDatabaseUpdate}
             setLastDatabaseUpdate={setLastDatabaseUpdate}
           />
         </Box>
 
         <Box sx={{...(view === View.DeleteShip ? {} : {display: "none"})}}>
           <DeleteShip
+            lastDatabaseUpdate={lastDatabaseUpdate}
             setLastDatabaseUpdate={setLastDatabaseUpdate}
           />
         </Box>
 
         <Box sx={{...(view === View.UpdateMission ? {} : {display: "none"})}}>
           <UpdateMission
+            lastDatabaseUpdate={lastDatabaseUpdate}
             setLastDatabaseUpdate={setLastDatabaseUpdate} 
           />
         </Box>

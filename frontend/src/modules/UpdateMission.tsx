@@ -1,26 +1,16 @@
-import { Box, Button, TextField } from "@mui/material"
+import { Box, Button, TextField, Typography } from "@mui/material"
 import { tableDescriptions } from "../constants/Constants"
 import { TableData, TableDescription } from "../constants/Types";
 import { ChangeEvent, useEffect, useState } from "react";
-import { updateMission } from '../api/MockApiService';
+import { projection, updateMission } from '../api/ApiService';
+import { DataTable } from "./DataTable";
 
-const UpdateMission = ({ setLastDatabaseUpdate }: { setLastDatabaseUpdate: React.Dispatch<React.SetStateAction<number>> }) => {
+const UpdateMission = ({ lastDatabaseUpdate, setLastDatabaseUpdate }: { lastDatabaseUpdate: number, setLastDatabaseUpdate: React.Dispatch<React.SetStateAction<number>> }) => {
+
+    const [tableData, setTableData] = useState<TableData[]>([]);
+    const [newRow, setNewRow] = useState<TableData>({});
 
     const tableDescription = tableDescriptions.find(table => table.name === "Missions") as TableDescription;
-
-    const [newRow, setNewRow] = useState<TableData>(tableDescription.attributes.reduce((acc: TableData, column: string) => {
-        acc[column] = ""
-        return acc
-    }, {}));
-
-    useEffect(() => {
-        setNewRow(
-            tableDescription.attributes.reduce((acc: TableData, column: string) => {
-            acc[column] = ""
-            return acc
-        }, {})
-        )
-    }, [tableDescription.attributes])
 
     const handleClick = async () => {
         try {
@@ -34,8 +24,8 @@ const UpdateMission = ({ setLastDatabaseUpdate }: { setLastDatabaseUpdate: React
             }, {})
             await updateMission(keys, attrs);
             setLastDatabaseUpdate(Date.now())
-        } catch (error) {
-            console.log(error)
+        } catch (e) {
+            alert(e)
         }
     }
 
@@ -43,11 +33,38 @@ const UpdateMission = ({ setLastDatabaseUpdate }: { setLastDatabaseUpdate: React
         setNewRow({ ...newRow, [column]: event.target.value})
     }
 
+    const setData = async (tableName: string, columns: string[]) => {
+        try {
+            const data = await projection(tableName, columns)
+            setTableData(data);
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    useEffect(() => {
+        setNewRow(
+            tableDescription.attributes.reduce((acc: TableData, column: string) => {
+            acc[column] = ""
+            return acc
+        }, {})
+        )
+    }, [tableDescription.attributes]);
+
+    useEffect(() => {
+        setData(tableDescription.name, tableDescription.primaryKeys.concat(tableDescription.attributes));
+    }, [lastDatabaseUpdate, tableDescription.attributes, tableDescription.name, tableDescription.primaryKeys])
+
     return (
         <Box sx={{ margin: "10px" }}>
-            <h2>
+            <Typography variant="h4">
                 Update Mission
-            </h2>
+            </Typography>
+            <DataTable
+                columns={tableDescription.primaryKeys.concat(tableDescription.attributes)}
+                keys={tableDescription.primaryKeys}
+                data={tableData}
+            /> 
             <Box
                 sx={{ margin: "10px" }}
             >
@@ -62,7 +79,6 @@ const UpdateMission = ({ setLastDatabaseUpdate }: { setLastDatabaseUpdate: React
                         />) 
                 }
             </Box>
-
             { 
                 tableDescription.attributes.map((column) => 
                     <TextField

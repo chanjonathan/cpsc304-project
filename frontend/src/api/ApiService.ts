@@ -2,6 +2,13 @@ import { TableData } from "../constants/Types"
 
 const HOST = "http://localhost:8000"
 
+const mapDataToLower = (data: TableData[]) => {
+    return data.map(d => Object.entries(d).reduce((obj: TableData, [key, value]) => {
+        obj[key.toLowerCase()] = value;
+        return obj
+    }, {}))
+}
+
 const projection = async (tableName: string, columns: string[]): Promise<TableData[]>  => {
     const params = columns.reduce((acc: string[], column) => {
         acc.push("attrs=" + column)
@@ -13,7 +20,7 @@ const projection = async (tableName: string, columns: string[]): Promise<TableDa
     if (response.status === 400) {
         throw new Error(error)
     }
-	return result;
+	return mapDataToLower(result);
 }
 
 const insertRow = async (tableName: string, keys: TableData, attrs: TableData) => {
@@ -43,7 +50,8 @@ const deleteShip = async (keys: TableData) => {
 }
 
 const updateMission = async (keys: TableData, attrs: TableData) => {
-    const params = Object.entries(keys).map((key, value) => `${key}=${value}`)
+    console.log(keys, attrs)
+    const params = Object.entries(keys).map(([key, value]) => `${key.toLowerCase()}=${value}`)
 	const response = await fetch(`${HOST}/Missions?${params.join("&")}`,
         { method: "PUT", body: JSON.stringify(attrs) }
     );
@@ -64,7 +72,7 @@ const selectMission = async (userInput: string): Promise<TableData[]> => {
     if (response.status === 400) {
         throw new Error(error)
     }
-    	return result;
+    return mapDataToLower(result);
 }
 
 const personnelAssignedToMissions = async (startDate: string, endDate: string) => {

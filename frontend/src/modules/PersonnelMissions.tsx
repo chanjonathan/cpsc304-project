@@ -1,4 +1,4 @@
-import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
 import { DatePicker, DateValidationError, LocalizationProvider, PickerChangeHandlerContext } from "@mui/x-date-pickers"
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs, { Dayjs } from "dayjs"
@@ -6,8 +6,13 @@ import { useState } from "react"
 import { personnelAssignedToMissions } from "../api/ApiService"
 import { TableData, TableDescription } from "../constants/Types"
 import { tableDescriptions } from "../constants/Constants"
+import { DataTable } from "./DataTable"
 
 const PersonnelMissions = () => {
+
+    const [selection, setSelection] = useState<TableData[] | null>(null);
+    const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
+    const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
     const personnelDescription = tableDescriptions.find(table => table.name === "Personnel") as TableDescription;
     const assignedToDescription = tableDescriptions.find(table => table.name === "AssignedTo") as TableDescription;
@@ -18,17 +23,13 @@ const PersonnelMissions = () => {
                     .concat(assignedToDescription.attributes)
                     .concat(missionsDescription.primaryKeys.concat(missionsDescription.attributes));
 
-    const [selection, setSelection] = useState<TableData[] | null>(null)
-    const [startDate, setStartDate] = useState<Dayjs | null>(dayjs())
-    const [endDate, setEndDate] = useState<Dayjs | null>(dayjs())
-
     const handleStartDateChange = (value: Dayjs | null, context: PickerChangeHandlerContext<DateValidationError>) => {
         setStartDate(value);
-    }
+    };
 
     const handleEndDateChange = (value: Dayjs | null, context: PickerChangeHandlerContext<DateValidationError>) => {
         setEndDate(value)
-    }
+    };
 
     const handleFindPersonnel = async () => {
         const startDateString = (startDate as Dayjs).format('DD-MMM-YY');
@@ -37,12 +38,15 @@ const PersonnelMissions = () => {
             const selection = await personnelAssignedToMissions(startDateString, endDateString)
             setSelection(selection)
         } catch (e) {
-            console.log(e)
+            console.error(e)
         }
-    }
+    };
 
     return (
         <Box>
+            <Typography variant="h4">
+                Personnel Mission Assignments By Period
+            </Typography>
             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
                 <Box sx={{display: "flex", flexDirection: "column"}}>
                     Start
@@ -70,34 +74,11 @@ const PersonnelMissions = () => {
                 Find Personnel
             </Button>
             { selection && 
-                <TableContainer sx={{minheight: "100px"}}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    { 
-                                        columns.map(column => 
-                                            <TableCell key={column} sx={keys.includes(column) ? { fontWeight: 900 } : {}}>
-                                                {column}
-                                            </TableCell>) 
-                                    }
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                { 
-                                    selection.map((data, i)=> 
-                                        <TableRow key={i}>
-                                            { 
-                                                columns.map(column =>
-                                                <TableCell key={column} sx={keys.includes(column) ? { fontWeight: 900 } : {}}>
-                                                    {data[column.toLowerCase()]}
-                                                </TableCell>) 
-                                            }
-                                        </TableRow>
-                                    )
-                                }
-                            </TableBody>
-                        </Table>  
-                </TableContainer>   
+                <DataTable
+                    columns={columns}
+                    keys={keys}
+                    data={selection}
+                /> 
             }
         </Box>
     )
