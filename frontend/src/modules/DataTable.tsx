@@ -1,7 +1,7 @@
-import { Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Box, Button, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Box, Paper } from '@mui/material';
 import { TableData } from '../constants/Types';
 import { EditRow } from './EditRow';
-import { deleteShip } from '../api/MockApiService';
+import { DeleteRow } from './DeleteRow';
 
 enum Mode {
     Read,
@@ -86,44 +86,6 @@ const ReadRow = ({ row, columns, keys }:
                 </TableCell>) 
         }
     </TableRow>
-
-const DeleteRow = ({ row, columns, keys, setLastDatabaseUpdate }: 
-    {
-        row: TableData, 
-        columns: string[], 
-        keys: string[],
-        setLastDatabaseUpdate: React.Dispatch<React.SetStateAction<number>> 
-    }) => {
-
-    const handleDelete = async () => {
-        try {
-            const keyValues = keys.reduce((obj: TableData, key) => {
-                obj[key] = row[key.toLowerCase()]
-                return obj
-            }, {})
-            await deleteShip(keyValues);
-            setLastDatabaseUpdate(Date.now());
-        } catch (error) {
-            alert(error);
-        }
-    }
-
-    return (
-            <TableRow>
-                {
-                    columns.map(column => 
-                        <TableCell key={column} sx={keys.includes(column) ? { fontWeight: 900 } : {}}>
-                            {row[column.toLowerCase()]}
-                        </TableCell>) 
-                }
-                <TableCell>
-                    <Button variant="contained" onClick={handleDelete}>
-                        Delete
-                    </Button>
-                </TableCell>
-            </TableRow>
-    )
-}
 
 export { DataTable, Mode }
 
