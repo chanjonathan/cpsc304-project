@@ -36,8 +36,9 @@ export const EditRow = ({ row, columns, keys, setLastDatabaseUpdate }: {
                 acc[key] = edit[key.toLowerCase()];
                 return acc;
             }, {});
-            await updateMission(keyValues, attrsValues);
+            const result = await updateMission(keyValues, attrsValues);
             setLastDatabaseUpdate(Date.now());
+            alert(result);
         } catch (e) {
             alert(e);
         }

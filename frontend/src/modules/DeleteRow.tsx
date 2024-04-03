@@ -15,8 +15,9 @@ export const DeleteRow = ({ row, columns, keys, setLastDatabaseUpdate }: {
                 obj[key] = row[key.toLowerCase()];
                 return obj;
             }, {});
-            await deleteShip(keyValues);
+            const result = await deleteShip(keyValues);
             setLastDatabaseUpdate(Date.now());
+            alert(result);
         } catch (error) {
             alert(error);
         }

@@ -25,14 +25,15 @@ const Insert = ({ lastDatabaseUpdate, setLastDatabaseUpdate }: { lastDatabaseUpd
             const keys = tableDescription.primaryKeys.reduce((acc: TableData, key) => {
                 acc[key] = newRow[key]
                 return acc
-            }, {})
+            }, {});
             const attrs = tableDescription.attributes.reduce((acc: TableData, key) => {
                 acc[key] = newRow[key]
                 return acc
-            }, {})
-            await insertRow(tableName, keys, attrs);
-            setLastDatabaseUpdate(Date.now())
-            setNewRow({})
+            }, {});
+            const result = await insertRow(tableName, keys, attrs);
+            setLastDatabaseUpdate(Date.now());
+            setNewRow({});
+            alert(result);
         } catch (e) {
             alert(e);
         }
