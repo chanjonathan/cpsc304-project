@@ -26,7 +26,7 @@ const HighEarningWorkModels = ({ lastDatabaseUpdate }: { lastDatabaseUpdate: num
                 High Earning Work Models
             </Typography>
             <Typography variant="h5">
-                Work model salary averages that earn more than the average of ground member salary
+                Work model salary averages that earn more than the average of ground member salaries
             </Typography>
             <DataTable 
                 columns={columns}

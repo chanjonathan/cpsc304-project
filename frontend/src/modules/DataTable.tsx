@@ -27,8 +27,8 @@ const DataTable = ({ columns, keys, data, mode, setLastDatabaseUpdate }:
                     <TableHead>
                         <TableRow>
                             { 
-                                columns.map(column =>
-                                    <TableCell key={column} sx={keys.includes(column) ? { fontWeight: 900 } : {}}>
+                                columns.map((column, i) =>
+                                    <TableCell key={i} sx={keys.includes(column) ? { fontWeight: 900 } : {}}>
                                         {column}
                                     </TableCell>) 
                             }
@@ -80,8 +80,8 @@ const ReadRow = ({ row, columns, keys }:
     }) =>
     <TableRow>
         {
-            columns.map(column => 
-                <TableCell key={column} sx={keys.includes(column) ? { fontWeight: 900 } : {}}>
+            columns.map((column, i) => 
+                <TableCell key={i} sx={keys.includes(column) ? { fontWeight: 900 } : {}}>
                     {row[column.toLowerCase()]}
                 </TableCell>) 
         }
