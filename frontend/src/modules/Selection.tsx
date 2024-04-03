@@ -65,7 +65,7 @@ const SelectMission = () => {
             const selection = await selectMission(userInput || "1=1");
             setSelection(selection);
         } catch (e) {
-            console.error(e)
+            alert(e)
         }
     }
 

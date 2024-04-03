@@ -37,7 +37,7 @@ const insertRow = async (tableName: string, keys: TableData, attrs: TableData) =
 }
 
 const deleteShip = async (keys: TableData) => {
-    const params = Object.entries(keys).map((key, value) => `${key}=${value}`)
+    const params = Object.entries(keys).map(([key, value]) => `${key}=${value}`)
 	const response = await fetch(`${HOST}/Ships?${params.join("&")}`,
         { method: "DELETE" }
     );

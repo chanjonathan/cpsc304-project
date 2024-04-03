@@ -48,7 +48,7 @@ const PersonnelMissions = () => {
                 Personnel Mission Assignments By Period
             </Typography>
             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
-                <Box sx={{display: "flex", flexDirection: "column"}}>
+                <Box sx={{display: "flex", flexDirection: "column", margin: "20px"}}>
                     Start
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker 
@@ -59,7 +59,7 @@ const PersonnelMissions = () => {
                     </LocalizationProvider>
                 </Box>
 
-                <Box sx={{display: "flex", flexDirection: "column"}}>
+                <Box sx={{display: "flex", flexDirection: "column", margin: "20px"}}>
                     End
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker 
