@@ -51,7 +51,6 @@ const DeleteShip = ({ lastDatabaseUpdate, setLastDatabaseUpdate }: { lastDatabas
                 Ships
             </Typography>
             <DataTable
-                key={`ships-table-${lastDatabaseUpdate}`}
                 columns={shipsDescription.primaryKeys.concat(shipsDescription.attributes)}
                 keys={shipsDescription.primaryKeys}
                 data={shipsData}
@@ -62,7 +61,6 @@ const DeleteShip = ({ lastDatabaseUpdate, setLastDatabaseUpdate }: { lastDatabas
                 Stations
             </Typography>
             <DataTable
-                key={`stations-table-${lastDatabaseUpdate}`}
                 columns={stationsDescription.primaryKeys.concat(stationsDescription.attributes)}
                 keys={stationsDescription.primaryKeys}
                 data={stationsData}

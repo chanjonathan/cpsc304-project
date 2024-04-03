@@ -1,6 +1,6 @@
 import { TableCell, TableRow, Box, TextField, Button } from '@mui/material';
 import { TableData } from '../constants/Types';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { updateMission } from '../api/ApiService';
 
 export const EditRow = ({ row, columns, keys, setLastDatabaseUpdate }: {
@@ -42,6 +42,11 @@ export const EditRow = ({ row, columns, keys, setLastDatabaseUpdate }: {
             alert(e);
         }
     };
+
+    useEffect(() => {
+        setEditing(false)
+        setEdit(row)
+    }, [row]);
 
     return (
         <TableRow>

@@ -34,7 +34,6 @@ const UpdateMission = ({ lastDatabaseUpdate, setLastDatabaseUpdate }:
                 Update Mission
             </Typography>
             <DataTable
-                key={lastDatabaseUpdate}
                 columns={tableDescription.primaryKeys.concat(tableDescription.attributes)}
                 keys={tableDescription.primaryKeys}
                 data={tableData}
