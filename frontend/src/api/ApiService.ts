@@ -2,6 +2,17 @@ import { TableData } from "../constants/Types"
 
 const HOST = "http://localhost:8000"
 
+const mapDateFormat = (data: TableData[]) => {
+    return data.map(d => Object.entries(d).reduce((obj: TableData, [key, value]) => {
+        if (key.endsWith("date") || key.endsWith("Date")) {
+            obj[key] = (new Date(value)).toLocaleString('en-GB', {
+                day: 'numeric', month: 'short', year: 'numeric'
+            }).replace(/ /g, '-')
+        }
+        return obj
+    }, d))
+}
+
 const mapDataToLower = (data: TableData[]) => {
     return data.map(d => Object.entries(d).reduce((obj: TableData, [key, value]) => {
         obj[key.toLowerCase()] = value;
@@ -20,7 +31,7 @@ const projection = async (tableName: string, columns: string[]): Promise<TableDa
     if (response.status === 400) {
         throw new Error(error)
     }
-	return mapDataToLower(result);
+	return mapDateFormat(mapDataToLower(result));
 }
 
 const insertRow = async (tableName: string, keys: TableData, attrs: TableData) => {
@@ -70,7 +81,7 @@ const selectMission = async (userInput: string): Promise<TableData[]> => {
     if (response.status === 400) {
         throw new Error(error)
     }
-    return mapDataToLower(result);
+    return mapDateFormat(mapDataToLower(result));
 }
 
 const personnelAssignedToMissions = async (startDate: string, endDate: string) => {
@@ -95,7 +106,7 @@ const shipCountByClass = async () => {
     if (response.status === 400) {
         throw new Error(error)
     }
-	return mapDataToLower(result);
+	return mapDateFormat(mapDataToLower(result));
 }
 
 const shipClassHavingMoreThanOne = async () => {
