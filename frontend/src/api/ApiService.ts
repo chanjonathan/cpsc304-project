@@ -24,9 +24,8 @@ const projection = async (tableName: string, columns: string[]): Promise<TableDa
 }
 
 const insertRow = async (tableName: string, keys: TableData, attrs: TableData) => {
-    const params = Object.entries(keys).map(([key, value]) => `${key}=${value}`)
-	const response = await fetch(`${HOST}/${tableName}?${params.join("&")}`,
-        { method: "POST", body: JSON.stringify(attrs) }
+	const response = await fetch(`${HOST}/${tableName}`,
+        { method: "POST", body: JSON.stringify({...attrs, ...keys}) }
     );
     const { result, error } = await response.json();
 
