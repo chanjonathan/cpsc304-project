@@ -137,9 +137,9 @@ async def assignedToMissions(request: Request, response: Response):
 
 @app.post("/{table}", status_code=400)
 async def createEntry(table, request: Request, response: Response):
-    attributes = dict(request.query_params)
-    attributes_lower = {attr.lower(): value for attr, value in attributes.items()}
     try:
+        body = await request.json()
+        attributes_lower = {attr.lower(): value for attr, value in body.items()}
         query = insert(metadata.tables[table.lower()]).values(**attributes_lower)
         with engine.connect() as conn:
             conn.execute(query)
@@ -153,10 +153,11 @@ async def createEntry(table, request: Request, response: Response):
 @app.delete("/Ships", status_code=400)
 async def deleteShip(request: Request, response: Response):
     attributes = dict(request.query_params)
+    attributes_lower = {attr.lower(): value for attr, value in attributes.items()}
     try:
         table = metadata.tables["ships"]
         query = delete(table)
-        for key, value in attributes.items():
+        for key, value in attributes_lower.items():
             query = query.where(table.c[key] == value)
         with engine.connect() as conn:
             conn.execute(query)
@@ -170,13 +171,15 @@ async def deleteShip(request: Request, response: Response):
 @app.put("/Missions", status_code=400)
 async def updateMissions(request: Request, response: Response):
     attributes = dict(request.query_params)
+    attributes_lower = {attr.lower(): value for attr, value in attributes.items()}
     try:
         table = metadata.tables["missions"]
         query = update(table)
-        for key, value in attributes.items():
+        for key, value in attributes_lower.items():
             query = query.where(table.c[key] == value)
         body = await request.json()
-        query = query.values(**body)
+        body_lower = {attr.lower(): value for attr, value in body.items()}
+        query = query.values(**body_lower)
         with engine.connect() as conn:
             conn.execute(query)
             conn.commit()
