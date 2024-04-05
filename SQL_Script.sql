@@ -195,16 +195,25 @@ CREATE TABLE Requires(
 );
 
 INSERT ALL
-    INTO Personnel VALUES (60000, '0000000001', 'Crew Mate', DATE '2018-06-15')
-    INTO Personnel VALUES (145000, '0000000002', 'Ellen Ripley', DATE '1979-05-25')
-    INTO Personnel VALUES (145000, '0000000003', 'Jim Raynor', DATE '1998-03-31')
-    INTO Personnel VALUES (60000, '0000000004', 'Malcolm Reynolds', DATE '2024-04-28')
-    INTO Personnel VALUES (60000, '0000000005', 'John Doe', DATE '2024-04-21')
-    INTO Personnel VALUES (60000, '0000000006', 'Neil Armstrong', DATE '1962-04-01')
-    INTO Personnel VALUES (30000, '0000000007', 'Buzz Aldrin', DATE '1962-05-23')
-    INTO Personnel VALUES (200000, '0000000008', 'Wullf Yularen', DATE '2023-07-10')
-    INTO Personnel VALUES (30000, '0000000009', 'David Hickman', DATE '2018-01-03')
-    INTO Personnel VALUES (30000, '0000000010', 'Joseph Hatfield', DATE '2021-11-27')
+    INTO Personnel VALUES (75000, '0000000001', 'Crew Mate', DATE '2018-06-15')
+    INTO Personnel VALUES (150000, '0000000002', 'Ellen Ripley', DATE '1979-05-25')
+    INTO Personnel VALUES (150000, '0000000003', 'Jim Raynor', DATE '1998-03-31')
+    INTO Personnel VALUES (85000, '0000000004', 'Malcolm Reynolds', DATE '2024-04-28')
+    INTO Personnel VALUES (65000, '0000000005', 'John Doe', DATE '2024-04-21')
+    INTO Personnel VALUES (85000, '0000000006', 'Neil Armstrong', DATE '1962-04-01')
+    INTO Personnel VALUES (45000, '0000000007', 'Buzz Aldrin', DATE '1962-05-23')
+    INTO Personnel VALUES (250000, '0000000008', 'Wullf Yularen', DATE '2023-07-10')
+    INTO Personnel VALUES (45000, '0000000009', 'David Hickman', DATE '2018-01-03')
+    INTO Personnel VALUES (45000, '0000000010', 'Joseph Hatfield', DATE '2021-11-27')
+    INTO Personnel VALUES (145000, '1888888888', 'Sarah Kerrigan', DATE '2479-12-01')
+    INTO Personnel VALUES (145000, '2888888888', 'Artanis', DATE '2345-11-05')
+    INTO Personnel VALUES (95000, '3888888888', 'Tychus Findlay', DATE '2460-04-27')
+    INTO Personnel VALUES (105000, '4888888888', 'Nova Terra', DATE '2456-07-15')
+    INTO Personnel VALUES (105000, '5888888888', 'Matt Horner', DATE '2450-09-08')
+    INTO Personnel VALUES (55000, '6888888888', 'Gabriel Tosh', DATE '2448-03-18')
+    INTO Personnel VALUES (200000, '7888888888', 'Arcturus Mengsk', DATE '2418-10-02')
+    INTO Personnel VALUES (85000, '8888888888', 'Tassadar', DATE '2323-06-23')
+    INTO Personnel VALUES (65000, '9888888888', 'Fenix', DATE '2312-12-12')
 SELECT 1 FROM dual;
 
 INSERT ALL
@@ -239,6 +248,15 @@ INSERT ALL
     INTO GroundMembers VALUES('0000000008', 'Online', '0000000002', 1)
     INTO GroundMembers VALUES('0000000009', 'In-Person', '0000000002', 1)
     INTO GroundMembers VALUES('0000000010', 'In-Person', '0000000002', 2)
+    INTO GroundMembers VALUES('1888888888', 'Hybrid', '0000000001', 1)
+    INTO GroundMembers VALUES('2888888888', 'In-Person', '0000000001', 1)
+    INTO GroundMembers VALUES('3888888888', 'Online', '0000000002', 1)
+    INTO GroundMembers VALUES('4888888888', 'In-Person', '0000000002', 4)
+    INTO GroundMembers VALUES('5888888888', 'In-Person', '0000000002', 6)
+    INTO GroundMembers VALUES('6888888888', 'Hybrid', '0000000001', 2)
+    INTO GroundMembers VALUES('7888888888', 'In-Person', '0000000001', 2)
+    INTO GroundMembers VALUES('8888888888', 'Online', '0000000002', 1)
+    INTO GroundMembers VALUES('9888888888', 'In-Person', '0000000002', 1)
 SELECT 1 FROM dual;
 
 INSERT ALL
@@ -287,6 +305,24 @@ INSERT ALL
     INTO Ships VALUES ('0000000003', DATE '2002-09-20', 'Aught Three', '0000000006')
     INTO Ships VALUES ('0000000004', DATE '2018-06-15', 'Skeld', '0000000006')
     INTO Ships VALUES ('0000000005', DATE '2023-11-09', 'Galactica', '0000000006')
+    INTO Ships VALUES ('0000000006', DATE '2023-11-09', 'Aught Three', '0000000006')
+    INTO Ships VALUES ('0000000007', DATE '2023-11-09', 'Aught Three', '0000000006')
+    INTO Ships VALUES ('0000000008', DATE '2023-11-09', 'Aught Three', '0000000006')
+    INTO Ships VALUES ('0000000009', DATE '2023-11-09', 'Aught Three', '0000000006')
+    INTO Ships VALUES ('0000000000', DATE '2023-11-09', 'Galactica', '0000000006')
+    INTO Ships VALUES ('0000000010', DATE '2023-11-09', 'Galactica', '0000000006')
+    INTO Ships VALUES ('0000000020', DATE '2023-11-09', 'Galactica', '0000000006')
+    INTO Ships VALUES ('8495672135', DATE '2022-11-22', 'Victory-II', '0000000006')
+    INTO Ships VALUES ('7269851340', DATE '2021-08-14', 'Lockmart CM-88B Bison', '0000000006')
+    INTO Ships VALUES ('9348752610', DATE '2023-01-05', 'Aught Three', '0000000006')
+    INTO Ships VALUES ('3579124680', DATE '2020-04-27', 'Skeld', '0000000006')
+    INTO Ships VALUES ('6834192075', DATE '2020-10-01', 'Galactica', '0000000006')
+    INTO Ships VALUES ('4951763028', DATE '2023-06-19', 'Aught Three', '0000000006')
+    INTO Ships VALUES ('9276803154', DATE '2022-03-28', 'Aught Three', '0000000006')
+    INTO Ships VALUES ('1658047932', DATE '2020-12-10', 'Aught Three', '0000000006')
+    INTO Ships VALUES ('5938271460', DATE '2021-09-07', 'Aught Three', '0000000006')
+    INTO Ships VALUES ('3791856240', DATE '2022-08-03', 'Galactica', '0000000006')
+    INTO Ships VALUES ('5276349801', DATE '2021-10-30', 'Galactica', '0000000006')
 SELECT 1 FROM dual;
 
 INSERT ALL
