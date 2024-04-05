@@ -26,7 +26,7 @@ const PopularShipClasses = ({ lastDatabaseUpdate }: { lastDatabaseUpdate: number
                 Most Popular Ship Classes
             </Typography>
             <Typography variant="h5">
-                Classes having more than 1 ship
+                Classes having more than 5 ships
             </Typography>
             <DataTable 
                 columns={columns}

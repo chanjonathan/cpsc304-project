@@ -119,7 +119,7 @@ const shipCountByClass = async () => {
 }
 
 const shipClassHavingMoreThanOne = async () => {
-	const response = await fetch(`${HOST}/ship-class-having-more-than-one`);
+	const response = await fetch(`${HOST}/ship-class-having-more-than`);
     const { result, error } = await response.json();
 
     if (response.status === 400) {
