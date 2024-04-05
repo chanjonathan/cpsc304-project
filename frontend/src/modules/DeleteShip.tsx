@@ -22,8 +22,8 @@ const DeleteShip = ({ lastDatabaseUpdate, setLastDatabaseUpdate }: { lastDatabas
         }
     }
 
-    const shipsDescription = tableDescriptions.find(table => table.name === "Ships") as TableDescription;
-    const stationsDescription = tableDescriptions.find(table => table.name === "Stations") as TableDescription;
+    const shipsDescription = tableDescriptions.find(table => table.name === "Certifications") as TableDescription;
+    const stationsDescription = tableDescriptions.find(table => table.name === "Obtained") as TableDescription;
 
     useEffect(() => {
         setData(shipsDescription.name, 
