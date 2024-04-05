@@ -158,4 +158,6 @@ const tableDescriptions: TableDescription[] = [
     }
 ];
 
-export { tableDescriptions };
+const dateColumns = ["FirstVisited", "LastVisited", "YOE", "ServiceStartDate", "StartDate", "EndDate"]
+
+export { tableDescriptions, dateColumns };

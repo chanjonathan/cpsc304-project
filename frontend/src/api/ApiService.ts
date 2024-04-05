@@ -1,10 +1,12 @@
+import { dateColumns } from "../constants/Constants"
 import { TableData } from "../constants/Types"
 
 const HOST = "http://localhost:8000"
 
 const mapDateFormat = (data: TableData[]) => {
     return data.map(d => Object.entries(d).reduce((obj: TableData, [key, value]) => {
-        if (key.endsWith("date") || key.endsWith("Date")) {
+        const dateColumnsLower = dateColumns.map(s => s.toLowerCase());
+        if (dateColumnsLower.includes(key) || dateColumns.includes(key)) {
             obj[key] = (new Date(value)).toLocaleString('en-GB', {
                 day: 'numeric', month: 'short', year: 'numeric'
             }).replace(/ /g, '-')
@@ -35,6 +37,13 @@ const projection = async (tableName: string, columns: string[]): Promise<TableDa
 }
 
 const insertRow = async (tableName: string, keys: TableData, attrs: TableData) => {
+    attrs = Object.entries(attrs).reduce((obj: TableData, [key, value]) => {
+        if (key === "Status" && value === "") {
+            return obj
+        }
+        obj[key] = value
+        return obj
+    }, {})
 	const response = await fetch(`${HOST}/${tableName}`,
         { method: "POST", body: JSON.stringify({...attrs, ...keys}) }
     );
