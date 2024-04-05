@@ -161,7 +161,7 @@ CREATE TABLE Obtained(
 	CrewMemberID CHAR(10),
 	PRIMARY KEY (CertificationID, CrewMemberID),
 	FOREIGN KEY (CrewMemberID) REFERENCES CrewMembers(EmployeeID),
-	FOREIGN KEY (CertificationID) REFERENCES Certifications
+	FOREIGN KEY (CertificationID) REFERENCES Certifications ON DELETE CASCADE
 );
 
 CREATE TABLE Requires(
@@ -170,5 +170,5 @@ CREATE TABLE Requires(
 	Position CHAR(30),
 	PRIMARY KEY (CertificationID, ShipID, Position),
 	FOREIGN KEY (ShipID, Position) REFERENCES Stations,
-	FOREIGN KEY (CertificationID) REFERENCES Certifications
+	FOREIGN KEY (CertificationID) REFERENCES Certifications ON DELETE CASCADE
 );
