@@ -1,6 +1,6 @@
 import './App.css';
 import { Box, Button, Typography } from '@mui/material';
-import { DeleteShip } from './modules/DeleteShip';
+import { DeleteCertification } from './modules/DeleteCertification';
 import { Insert } from './modules/Insert';
 import { Projection } from './modules/Projection';
 import { UpdateMission } from './modules/UpdateMission';
@@ -79,7 +79,7 @@ const App = () => {
         </Box>
 
         <Box sx={{...(view === View.DeleteShip ? {} : {display: "none"})}}>
-          <DeleteShip
+          <DeleteCertification
             lastDatabaseUpdate={lastDatabaseUpdate}
             setLastDatabaseUpdate={setLastDatabaseUpdate}
           />
