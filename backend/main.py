@@ -150,12 +150,12 @@ async def createEntry(table, request: Request, response: Response):
         return {"error": str(e)}
 
 
-@app.delete("/Ships", status_code=400)
-async def deleteShip(request: Request, response: Response):
+@app.delete("/Certifications", status_code=400)
+async def deleteCertification(request: Request, response: Response):
     attributes = dict(request.query_params)
     attributes_lower = {attr.lower(): value for attr, value in attributes.items()}
     try:
-        table = metadata.tables["ships"]
+        table = metadata.tables["certifications"]
         query = delete(table)
         for key, value in attributes_lower.items():
             query = query.where(table.c[key] == value)
