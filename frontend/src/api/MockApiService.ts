@@ -16,15 +16,24 @@ const projection = async (tableName: string, columns: string[]): Promise<TableDa
 
 const insertRow = async (tableName: string, keys: TableData, attrs: TableData) => {
     console.log("post request with", tableName, JSON.stringify(keys), JSON.stringify(attrs))
+    await new Promise((resolve) => {
+        setTimeout(resolve, 1000)
+    })
 }
 
 const deleteShip = async (keys: TableData)  => {
     console.log("delete ship request with", JSON.stringify(keys))
+    await new Promise((resolve) => {
+        setTimeout(resolve, 1000)
+    })
 }
 
 const updateMission = async (keys: TableData, attrs: TableData) => {
     console.log("update mission request with", JSON.stringify(keys), JSON.stringify(attrs))
+    await new Promise((resolve) => {
+        setTimeout(resolve, 1000)
+    })
 }
 
 
-export { projection, insertRow, deleteShip, updateMission} 
+export { projection, insertRow, deleteShip, updateMission } 

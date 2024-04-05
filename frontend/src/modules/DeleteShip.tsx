@@ -1,66 +1,72 @@
-import { Box, Button, TextField } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 import { tableDescriptions } from "../constants/Constants"
 import { TableData, TableDescription } from "../constants/Types";
-import { ChangeEvent, useEffect, useState } from "react";
-import { deleteShip } from '../api/MockApiService';
+import { useEffect, useState } from "react";
+import { projection } from '../api/ApiService';
+import { DataTable, Mode } from "./DataTable";
 
-const DeleteShip = ({ setLastDatabaseUpdate }: { setLastDatabaseUpdate: React.Dispatch<React.SetStateAction<number>> }) => {
+const DeleteShip = ({ lastDatabaseUpdate, setLastDatabaseUpdate }: { lastDatabaseUpdate: number, setLastDatabaseUpdate: React.Dispatch<React.SetStateAction<number>> }) => {
 
-    const tableDescription = tableDescriptions.find(table => table.name === "Ships") as TableDescription;
+    const [shipsData, setShipsData] = useState<TableData[]>([]);
+    const [stationsData, setStationsData] = useState<TableData[]>([]);
 
-    const [deleteKey, setDeleteKey] = useState<TableData>(tableDescription.primaryKeys.reduce((acc: TableData, column: string) => {
-        acc[column] = ""
-        return acc
-    }, {}));
-
-    useEffect(() => {
-        setDeleteKey(
-            tableDescription.attributes.reduce((acc: TableData, column: string) => {
-            acc[column] = ""
-            return acc
-        }, {})
-        )
-    }, [tableDescription.attributes])
-
-    const handleClick = async () => {
+    const setData = async (ships: string, shipsColumns: string[], stations: string, stationsColumns: string[]) => {
         try {
-            await deleteShip(deleteKey);
-            setLastDatabaseUpdate(Date.now());
-        } catch (error) {
-            console.log(error);
+            const [shipsData, stationsData] = await Promise.all(
+                [projection(ships, shipsColumns), projection(stations, stationsColumns)]
+            );
+            setShipsData(shipsData);
+            setStationsData(stationsData);
+        } catch (e) {
+            console.error(e);
         }
     }
 
-    const handleChange = (event: ChangeEvent<HTMLInputElement>, column: string) => {
-        setDeleteKey({ ...deleteKey, [column]: event.target.value})
-    }
-    
+    const shipsDescription = tableDescriptions.find(table => table.name === "Ships") as TableDescription;
+    const stationsDescription = tableDescriptions.find(table => table.name === "Stations") as TableDescription;
+
+    useEffect(() => {
+        setData(shipsDescription.name, 
+            shipsDescription.primaryKeys.concat(shipsDescription.attributes),
+            stationsDescription.name,
+            stationsDescription.primaryKeys.concat(stationsDescription.attributes),
+        );
+    }, [
+            lastDatabaseUpdate, 
+            shipsDescription.attributes, 
+            shipsDescription.name, 
+            shipsDescription.primaryKeys, 
+            stationsDescription.attributes, 
+            stationsDescription.name, 
+            stationsDescription.primaryKeys
+        ]
+    );
+
     return (
         <Box sx={{ margin: "10px" }}>
-            <h2>
+            <Typography variant="h4">
                 Delete Ship
-            </h2>
-            <Box
-                sx={{ margin: "10px" }}
-            >
-                { 
-                    tableDescription.primaryKeys.map((key) => 
-                        <TextField
-                            key={key}
-                            label={key} 
-                            onChange={(event: ChangeEvent<HTMLInputElement>) => handleChange(event, key)}
-                            value={deleteKey[key] || ""}
-                        />
-                    ) 
-                }
-            </Box>
-            <Button
-                variant="contained"
-                onClick={handleClick}
-            >
-                Delete
-            </Button>
-        </Box>    )
+            </Typography>
+            <Typography variant="h6">
+                Ships
+            </Typography>
+            <DataTable
+                columns={shipsDescription.primaryKeys.concat(shipsDescription.attributes)}
+                keys={shipsDescription.primaryKeys}
+                data={shipsData}
+                mode={Mode.Delete}
+                setLastDatabaseUpdate={setLastDatabaseUpdate}
+            /> 
+            <Typography variant="h6">
+                Stations
+            </Typography>
+            <DataTable
+                columns={stationsDescription.primaryKeys.concat(stationsDescription.attributes)}
+                keys={stationsDescription.primaryKeys}
+                data={stationsData}
+            /> 
+        </Box>
+    )
 }
 
 export { DeleteShip }

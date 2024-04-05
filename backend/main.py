@@ -46,7 +46,7 @@ async def getShipCountByClass(response: Response):
             keys = conn.execute(text(query)).keys()
         results = parseRowsToJSON(rows, keys)
         response.status_code = status.HTTP_200_OK
-        return results
+        return {"result": results}
     except Exception as e:
         return {"error": str(e)}
 
@@ -66,7 +66,7 @@ HAVING COUNT(*)>1
             keys = conn.execute(text(query)).keys()
         results = parseRowsToJSON(rows, keys)
         response.status_code = status.HTTP_200_OK
-        return results
+        return {"result": results}
     except Exception as e:
         return {"error": str(e)}
 
@@ -88,7 +88,7 @@ HAVING AVG(p.Salary) > ( SELECT AVG(p1.Salary)
             keys = conn.execute(text(query)).keys()
         results = parseRowsToJSON(rows, keys)
         response.status_code = status.HTTP_200_OK
-        return results
+        return {"result": results}
     except Exception as e:
         return {"error": str(e)}
 
@@ -111,7 +111,7 @@ WHERE NOT EXISTS (SELECT m.MissionID
             keys = conn.execute(text(query)).keys()
         results = parseRowsToJSON(rows, keys)
         response.status_code = status.HTTP_200_OK
-        return results
+        return {"result": results}
     except Exception as e:
         return {"error": str(e)}
 
@@ -130,16 +130,16 @@ async def assignedToMissions(request: Request, response: Response):
             keys = conn.execute(text(query)).keys()
         results = parseRowsToJSON(rows, keys)
         response.status_code = status.HTTP_200_OK
-        return results
+        return {"result": results}
     except Exception as e:
         return {"error": str(e)}
 
 
 @app.post("/{table}", status_code=400)
 async def createEntry(table, request: Request, response: Response):
-    attributes = dict(request.query_params)
-    attributes_lower = {attr.lower(): value for attr, value in attributes.items()}
     try:
+        body = await request.json()
+        attributes_lower = {attr.lower(): value for attr, value in body.items()}
         query = insert(metadata.tables[table.lower()]).values(**attributes_lower)
         with engine.connect() as conn:
             conn.execute(query)
@@ -153,10 +153,11 @@ async def createEntry(table, request: Request, response: Response):
 @app.delete("/Certifications", status_code=400)
 async def deleteCertification(request: Request, response: Response):
     attributes = dict(request.query_params)
+    attributes_lower = {attr.lower(): value for attr, value in attributes.items()}
     try:
         table = metadata.tables["certifications"]
         query = delete(table)
-        for key, value in attributes.items():
+        for key, value in attributes_lower.items():
             query = query.where(table.c[key] == value)
         with engine.connect() as conn:
             conn.execute(query)
@@ -170,13 +171,15 @@ async def deleteCertification(request: Request, response: Response):
 @app.put("/Missions", status_code=400)
 async def updateMissions(request: Request, response: Response):
     attributes = dict(request.query_params)
+    attributes_lower = {attr.lower(): value for attr, value in attributes.items()}
     try:
         table = metadata.tables["missions"]
         query = update(table)
-        for key, value in attributes.items():
+        for key, value in attributes_lower.items():
             query = query.where(table.c[key] == value)
         body = await request.json()
-        query = query.values(**body)
+        body_lower = {attr.lower(): value for attr, value in body.items()}
+        query = query.values(**body_lower)
         with engine.connect() as conn:
             conn.execute(query)
             conn.commit()
@@ -186,7 +189,7 @@ async def updateMissions(request: Request, response: Response):
         return {"error": str(e)}
 
 
-@app.post("/Missions/missions/query", status_code=400)
+@app.post("/Missions/query", status_code=400)
 async def queryMissions(request: Request, response: Response):
     try:
         body = await request.json()
@@ -196,7 +199,7 @@ async def queryMissions(request: Request, response: Response):
             keys = conn.execute(text(query)).keys()
         results = parseRowsToJSON(rows, keys)
         response.status_code = status.HTTP_200_OK
-        return results
+        return { "result": results }
     except Exception as e:
         return {"error": str(e)}
 
