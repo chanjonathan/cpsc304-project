@@ -2,7 +2,10 @@
 
 _Sample project was used for the db_tunnel.sh script_
 
-### How to run project
+## Project Description
+Our project is an application designed for the Aerospace Industry. Our project aims to help manage the creation of missions to outer space and the organization of human and capital resources.
+
+## How to run project
 Install python requirements
 `pip install -r requirements.txt --no-deps`
 
