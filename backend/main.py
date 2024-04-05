@@ -51,7 +51,7 @@ async def getShipCountByClass(response: Response):
         return {"error": str(e)}
 
 
-@app.get("/ship-class-having-more-than-one", status_code=400)
+@app.get("/ship-class-having-more-than", status_code=400)
 async def moreThanOneShipClass(response: Response):
     try:
         query = """
@@ -59,7 +59,7 @@ SELECT m.Class, COUNT(*) as shipCount
 FROM ships s, models m
 WHERE s.Model=m.Model
 GROUP BY m.Class
-HAVING COUNT(*)>1
+HAVING COUNT(*)>5
         """
         with engine.connect() as conn:
             rows = conn.execute(text(query)).fetchall()
