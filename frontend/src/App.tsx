@@ -7,15 +7,15 @@ import { UpdateMission } from './modules/UpdateMission';
 import { useState } from 'react';
 import { SelectMission } from './modules/Selection';
 import { PersonnelMissions } from './modules/PersonnelMissions';
-import { ShipCountByClass } from './modules/ShipCountByClass';
-import { PopularShipClasses } from './modules/PopularShipClasses';
+import { CertificationCountByClass } from './modules/CertificationCountByClass';
+import { PopularCertificationClasses } from './modules/PopularCertificationClasses';
 import { HighEarningWorkModels } from './modules/HighEarningWorkModels';
 import { PersonnelOnAllMissions } from './modules/PersonnelOnAllMissions';
 
 enum View {
   Projection,
   Insert,
-  DeleteShip,
+  DeleteCertification,
   UpdateMission,
   SelectMission,
   PersonnelMissions,
@@ -57,7 +57,7 @@ const App = () => {
       }}>
         <Button onClick={() => setView(View.Projection)}>Project Data</Button>
         <Button onClick={() => setView(View.Insert)}>Insert Row</Button>
-        <Button onClick={() => setView(View.DeleteShip)}>Delete Ship</Button>
+        <Button onClick={() => setView(View.DeleteCertification)}>Delete Certification</Button>
         <Button onClick={() => setView(View.UpdateMission)}>Update Mission</Button>
         <Button onClick={() => setView(View.SelectMission)}>Select Mission</Button>
         <Button onClick={() => setView(View.PersonnelMissions)}>Personnel Mission Assignments</Button>
@@ -78,7 +78,7 @@ const App = () => {
           />
         </Box>
 
-        <Box sx={{...(view === View.DeleteShip ? {} : {display: "none"})}}>
+        <Box sx={{...(view === View.DeleteCertification ? {} : {display: "none"})}}>
           <DeleteCertification
             lastDatabaseUpdate={lastDatabaseUpdate}
             setLastDatabaseUpdate={setLastDatabaseUpdate}
@@ -101,10 +101,10 @@ const App = () => {
         </Box>
 
         <Box sx={{...(view === View.CoolStats ? {} : {display: "none"})}}>
-          <ShipCountByClass
+          <CertificationCountByClass
             lastDatabaseUpdate={lastDatabaseUpdate}
           />
-          <PopularShipClasses
+          <PopularCertificationClasses
             lastDatabaseUpdate={lastDatabaseUpdate}
           />      
           <HighEarningWorkModels
