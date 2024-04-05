@@ -7,8 +7,8 @@ import { UpdateMission } from './modules/UpdateMission';
 import { useState } from 'react';
 import { SelectMission } from './modules/Selection';
 import { PersonnelMissions } from './modules/PersonnelMissions';
-import { CertificationCountByClass } from './modules/CertificationCountByClass';
-import { PopularCertificationClasses } from './modules/PopularCertificationClasses';
+import { ShipCountByClass } from './modules/ShipCountByClass';
+import { PopularShipClasses } from './modules/PopularShipClasses';
 import { HighEarningWorkModels } from './modules/HighEarningWorkModels';
 import { PersonnelOnAllMissions } from './modules/PersonnelOnAllMissions';
 
@@ -101,10 +101,10 @@ const App = () => {
         </Box>
 
         <Box sx={{...(view === View.CoolStats ? {} : {display: "none"})}}>
-          <CertificationCountByClass
+          <ShipCountByClass
             lastDatabaseUpdate={lastDatabaseUpdate}
           />
-          <PopularCertificationClasses
+          <PopularShipClasses
             lastDatabaseUpdate={lastDatabaseUpdate}
           />      
           <HighEarningWorkModels
