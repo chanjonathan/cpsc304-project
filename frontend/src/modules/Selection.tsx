@@ -28,6 +28,8 @@ const operators: string[] = [
 
 const connectorOperators = ["AND", "OR"];
 
+const missionStringCols = ["Name", "Description", "StartDate", "EndDate", "Planet"]
+
 const SelectMission = () => {
 
     const [selection, setSelection] = useState<TableData[] | null>(null)
@@ -57,7 +59,8 @@ const SelectMission = () => {
             if (i > 0) {
                 acc += ` ${connectors[i-1].operator} `;
             }
-            acc += `${condition.column}${condition.operator}${condition.value}`
+            const value = missionStringCols.includes(condition.column) ? `'${condition.value}'` : condition.value
+            acc += `${condition.column}${condition.operator}${value}`
             return acc;
         }, "");
         

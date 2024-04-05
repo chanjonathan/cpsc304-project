@@ -93,7 +93,7 @@ const selectMission = async (userInput: string): Promise<TableData[]> => {
     return mapDateFormat(mapDataToLower(result));
 }
 
-const personnelAssignedToMissions = async (startDate: string, endDate: string) => {
+const personnelAssignedToMissions = async (startDate: string, endDate: string): Promise<TableData[]> => {
 	const response = await fetch(`${HOST}/personnel-assignedto-missions`,
         { method: "POST", body: JSON.stringify({
             startDate: startDate,
@@ -105,7 +105,7 @@ const personnelAssignedToMissions = async (startDate: string, endDate: string) =
     if (response.status === 400) {
         throw new Error(error)
     }
-	return result;
+	return mapDateFormat(result);
 }
 
 const shipCountByClass = async () => {
