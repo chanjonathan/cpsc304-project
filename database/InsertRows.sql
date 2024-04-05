@@ -122,11 +122,11 @@ INSERT ALL
 SELECT 1 FROM dual;
 
 INSERT ALL
-    INTO Tasks VALUES ('0000000001', 3, 'Fix wiring', NULL, '0000000001')
-    INTO Tasks VALUES ('0000000002', 1, 'Clear asteroids', NULL, '0000000001')
-    INTO Tasks VALUES ('0000000003', 1, 'Mine minerals', NULL, '0000000001')
-    INTO Tasks VALUES ('0000000004', 1, 'Collect vespene gas', NULL, '0000000001')
-    INTO Tasks VALUES ('0000000005', 1, 'Twiddle thumbs', NULL, '0000000001')
+    INTO Tasks (TaskID, Priority, Description, MissionID) VALUES ('0000000001', 3, 'Fix wiring', '0000000001')
+    INTO Tasks (TaskID, Priority, Description, MissionID) VALUES ('0000000002', 1, 'Clear asteroids', '0000000001')
+    INTO Tasks (TaskID, Priority, Description, MissionID) VALUES ('0000000003', 1, 'Mine minerals', '0000000001')
+    INTO Tasks (TaskID, Priority, Description, MissionID) VALUES ('0000000004', 1, 'Collect vespene ', '0000000001')
+    INTO Tasks (TaskID, Priority, Description, MissionID) VALUES ('0000000005', 1, 'Twiddle thumbs', '0000000001')
 SELECT 1 FROM dual;
 
 INSERT ALL
